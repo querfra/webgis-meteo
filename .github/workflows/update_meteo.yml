@@ -1,5 +1,4 @@
 name: Aggiornamento Meteo WebGIS
-name: Aggiornamento Meteo WebGIS
 
 on:
   schedule:
