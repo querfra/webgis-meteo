@@ -4,40 +4,64 @@ from datetime import datetime
 import requests
 
 # --- CONFIGURAZIONE ---
-# Inserisci qui la tua logica di download esistente dall'API di Weather Underground
-# Assicurati che alla fine dello scaricamento tu abbia una lista di dizionari chiamata 'features'
-# (ciascuna strutturata come GeoJSON Feature con "geometry" e "properties")
+API_KEY = "8231f09cfdc44e68b1f09cfdc46e686b"
+# Inserisci qui l'elenco delle stazioni di Brindisi e dintorni che vuoi monitorare
+STATION_IDS = [
+    "IBRINDISI2", # Esempio di ID stazione (sostituisci con i tuoi)
+    "IPUGLIA..."  # Aggiungi altre stazioni se le hai
+]
 
-# ESEMPIO DELLA STRUTTURA CHE DEVI AVERE NEL TUO SCRIPT:
 features = []
 
-# (Qui dentro cicli le stazioni della tua zona e popoli 'features')
-# Esempio fittizio del ciclo di popolamento:
-# for station in stazioni:
-#     feature = {
-#         "type": "Feature",
-#         "geometry": {
-#             "type": "Point",
-#             "coordinates": [lon, lat]
-#         },
-#         "properties": {
-#             "station_id": station.get("stationID"),
-#             "neighborhood": station.get("neighborhood"),
-#             "time": station.get("obsTimeLocal"),
-#             "temp": data_metric.get("temp"),
-#             "humidity": data_metric.get("humidity"),
-#             "wind_speed": data_metric.get("windSpeed"),
-#             "wind_gust": data_metric.get("windGust"),
-#             "wind_dir": data_metric.get("winddir"),
-#             "pressure": data_metric.get("pressure"),
-#             "precip_rate": data_metric.get("precipRate"),
-#             "precip_total": data_metric.get("precipTotal"),
-#             "dewpoint": data_metric.get("dewpoint"),
-#             "solar_radiation": data.get("solarRadiation"),
-#             "uv": data.get("uv")
-#         }
-#     }
-#     features.append(feature)
+# Cicla le stazioni per scaricare i dati correnti
+for station_id in STATION_IDS:
+    url = f"https://api.weather.com/v2/pws/observations/current?stationId={station_id}&format=json&units=m&apiKey={API_KEY}"
+    
+    try:
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            observations = data.get("observations", [])
+            
+            if observations:
+                obs = observations[0]
+                lat = obs.get("lat")
+                lon = obs.get("lon")
+                
+                # Se la stazione restituisce le coordinate valide
+                if lat is not None and lon is not None:
+                    # Estrazione metrica (gestione sicura dei dati metrici 'metric')
+                    metric = obs.get("metric", {})
+                    
+                    feature = {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [lon, lat]
+                        },
+                        "properties": {
+                            "station_id": station_id,
+                            "neighborhood": obs.get("neighborhood", "N/D"),
+                            "time": obs.get("obsTimeLocal", "N/D"),
+                            "temp": metric.get("temp"),
+                            "humidity": obs.get("humidity"),
+                            "wind_speed": metric.get("windSpeed"),
+                            "wind_gust": metric.get("windGust"),
+                            "wind_dir": obs.get("winddir"),
+                            "pressure": metric.get("pressure"),
+                            "precip_rate": metric.get("precipRate"),
+                            "precip_total": metric.get("precipTotal"),
+                            "dewpt": metric.get("dewpt"), # Mappato come dewpoint nel popup
+                            "dewpoint": metric.get("dewpt"),
+                            "solar_radiation": obs.get("solarRadiation"),
+                            "uv": obs.get("uv")
+                        }
+                    }
+                    features.append(feature)
+        else:
+            print(f"Errore HTTP {response.status_code} per la stazione {station_id}")
+    except Exception as e:
+        print(f"Errore di connessione per la stazione {station_id}: {e}")
 
 # 1. Creazione dell'oggetto GeoJSON corrente (latest)
 latest_data = {
@@ -46,43 +70,38 @@ latest_data = {
     "features": features
 }
 
-# Assicurati che la cartella 'data' esista
+# Assicurati che la cartella 'data' esista e salva il file latest
 os.makedirs("data", exist_ok=True)
-
-# Salva il file latest (sovrascritto ogni volta per la mappa in tempo reale)
 with open("data/meteo_latest.json", "w", encoding="utf-8") as f:
     json.dump(latest_data, f, ensure_ascii=False, indent=2)
 
 
 # --- GESTIONE ARCHIVIO STORICO (OGNI 10 MINUTI) ---
 
-# 2. Crea la cartella 'archive' se non esiste
-archive_dir = "archive"
-os.makedirs(archive_dir, exist_ok=True)
+if features:
+    archive_dir = "archive"
+    os.makedirs(archive_dir, exist_ok=True)
 
-# Organizza l'archivio creando un file JSON separato per ogni giorno (es. meteo_archive_2026-09-03.json)
-oggi_str = datetime.now().strftime("%Y-%m-%d")
-archive_file = os.path.join(archive_dir, f"meteo_archive_{oggi_str}.json")
+    oggi_str = datetime.now().strftime("%Y-%m-%d")
+    archive_file = os.path.join(archive_dir, f"meteo_archive_{oggi_str}.json")
 
-# 3. Leggi l'archivio del giorno esistente o inizializzalo
-archive_data = {"type": "FeatureCollection", "features": []}
-if os.path.exists(archive_file):
-    try:
-        with open(archive_file, "r", encoding="utf-8") as f:
-            archive_data = json.load(f)
-    except Exception as e:
-        print(f"Errore lettura archivio esistente: {e}")
+    archive_data = {"type": "FeatureCollection", "features": []}
+    if os.path.exists(archive_file):
+        try:
+            with open(archive_file, "r", encoding="utf-8") as f:
+                archive_data = json.load(f)
+        except Exception as e:
+            print(f"Errore lettura archivio esistente: {e}")
 
-# 4. Appendi i nuovi dati all'archivio aggiungendo un timestamp di registrazione
-timestamp_archiviazione = datetime.now().isoformat()
-for feature in features:
-    # Creiamo una copia della feature per l'archivio
-    archived_feature = json.loads(json.dumps(feature))
-    archived_feature["properties"]["archived_at"] = timestamp_archiviazione
-    archive_data["features"].append(archived_feature)
+    timestamp_archiviazione = datetime.now().isoformat()
+    for feature in features:
+        archived_feature = json.loads(json.dumps(feature))
+        archived_feature["properties"]["archived_at"] = timestamp_archiviazione
+        archive_data["features"].append(archived_feature)
 
-# 5. Salva il file di archivio aggiornato
-with open(archive_file, "w", encoding="utf-8") as f:
-    json.dump(archive_data, f, ensure_ascii=False, indent=2)
+    with open(archive_file, "w", encoding="utf-8") as f:
+        json.dump(archive_data, f, ensure_ascii=False, indent=2)
 
-print("Dati correnti aggiornati e archiviati con successo!")
+    print(f"Scaricati e archiviati con successo {len(features)} record.")
+else:
+    print("Nessun dato valido scaricato in questa esecuzione.")
