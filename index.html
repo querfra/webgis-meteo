@@ -167,7 +167,6 @@
 
             function loadMeteoData() {
                 fetch('data/meteo_latest.json?t=' + new Date().getTime())
-                    .title = "Meteo Data"
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
@@ -188,7 +187,7 @@
                                         <div class="temp-circle" style="background-color: ${color};">${tempVal}</div>
                                     `,
                                     iconSize: [32, 32],
-                                    iconAnchor: [16, 18], // Centrato geometricamente sul cerchio della temperatura
+                                    iconAnchor: [16, 18],
                                     popupAnchor: [0, -18]
                                 });
 
