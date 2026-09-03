@@ -155,12 +155,16 @@
                 maxZoom: 19
             }).addTo(map);
 
-            function getTempColor(temp) {
-                if (temp < 15) return "#0011ff";
-                if (temp < 20) return "#400cbf";
-                if (temp < 25) return "#800880";
-                if (temp < 30) return "#bf0440";
-                return "#ff0000";
+      function getTempColor(temp) {
+                if (temp < 0) return "#7c3aed";      // < 0°C: Viola
+                if (temp < 3) return "#1e3a8a";       // 0°C - 3°C: Blu scuro
+                if (temp < 10) return "#0284c7";      // 3°C - 10°C: Azzurro
+                if (temp < 15) return "#16a34a";      // 10°C - 15°C: Verde
+                if (temp < 20) return "#eab308";      // 15°C - 20°C: Giallo
+                if (temp < 25) return "#f97316";      // 20°C - 25°C: Arancione
+                if (temp < 30) return "#dc2626";      // 25°C - 30°C: Rosso
+                if (temp < 35) return "#991b1b";      // 30°C - 35°C: Rosso scuro
+                return "#581c87";                     // >= 35°C: Viola
             }
 
             let geojsonLayer;
