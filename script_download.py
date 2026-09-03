@@ -61,6 +61,7 @@ for station_id in STATION_IDS:
     "solar_radiation": data.get("solarRadiation"),
     "uv": data.get("uv")
                     }
+                    }
                     geojson_features.append(feature)
     except Exception as e:
         print(f"Errore nello scaricamento della stazione {station_id}: {e}")
