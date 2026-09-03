@@ -7,8 +7,9 @@ import requests
 API_KEY = "8231f09cfdc44e68b1f09cfdc46e686b"
 # Inserisci qui l'elenco delle stazioni di Brindisi e dintorni che vuoi monitorare
 STATION_IDS = [
-    "IBRINDISI2", # Esempio di ID stazione (sostituisci con i tuoi)
-    "IPUGLIA..."  # Aggiungi altre stazioni se le hai
+ "IBRIND44", "IBRIND51", "IBRIND57", "IBRIND60", "IBRIND14",
+    "IBRIND47", "IBRIND37", "IBRIND55", "IBRIND32", "ISANPI44",
+    "IPUGLIAL9", "ISANVI152", "ICAROV30"
 ]
 
 features = []
