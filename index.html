@@ -217,11 +217,21 @@
                                 const marker = L.marker(latlng, { icon: customIcon });
 
                                 marker.bindPopup(`
-                                    <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood})<br>
-                                    <strong>Temperatura:</strong> ${props.temp} °C<br>
-                                    <strong>Umidità:</strong> ${props.humidity}%<br>
-                                    <strong>Vento:</strong> ${props.wind_speed} km/h (${props.wind_dir}°)<br>
-                                    <strong>Ora:</strong> ${props.time}
+                                    <div style="font-size: 13px; line-height: 1.4;">
+                                        <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood || 'N/D'})<br>
+                                        <strong>Ora:</strong> ${props.time || 'N/D'}<br>
+                                        <hr style="margin: 5px 0; border: none; border-top: 1px solid #cbd5e1;">
+                                        <strong>Temperatura:</strong> ${props.temp !== undefined ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>
+                                        <strong>Punto di Rugiada:</strong> ${props.dewpoint !== undefined ? props.dewpoint + ' °C' : 'N/D'}<br>
+                                        <strong>Umidità:</strong> ${props.humidity !== undefined ? props.humidity + '%' : 'N/D'}<br>
+                                        <strong>Pressione:</strong> ${props.pressure !== undefined ? props.pressure + ' hPa' : 'N/D'}<br>
+                                        <strong>Vento:</strong> ${props.wind_speed !== undefined ? props.wind_speed + ' km/h' : 'N/D'} (Dir: ${props.wind_dir !== undefined ? props.wind_dir + '°' : 'N/D'})<br>
+                                        <strong>Raffica:</strong> ${props.wind_gust !== undefined ? props.wind_gust + ' km/h' : 'N/D'}<br>
+                                        <strong>Pioggia (Rate):</strong> ${props.precip_rate !== undefined ? props.precip_rate + ' mm/h' : 'N/D'}<br>
+                                        <strong>Pioggia (Totale):</strong> ${props.precip_total !== undefined ? props.precip_total + ' mm' : 'N/D'}<br>
+                                        <strong>Radiazione Solare:</strong> ${props.solar_radiation !== undefined ? props.solar_radiation + ' W/m²' : 'N/D'}<br>
+                                        <strong>Indice UV:</strong> ${props.uv !== undefined ? props.uv : 'N/D'}
+                                    </div>
                                 `);
 
                                 return marker;
