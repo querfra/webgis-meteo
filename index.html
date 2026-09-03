@@ -59,10 +59,52 @@
         #error-msg { color: #dc2626; font-size: 12px; display: none; margin-top: 10px; }
 
         /* Stili Simbolo Meteo */
-        .meteo-marker { position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
-        .wind-bar { position: absolute; width: 3px; height: 24px; background-color: #000; top: -6px; transform-origin: bottom center; z-index: 1; }
-        .temp-circle { position: relative; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #000; color: #fff; font-weight: bold; font-size: 11px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .info-box { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000; font-size: 12px; }
+        .meteo-marker {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+        }
+
+        .wind-bar {
+            position: absolute;
+            width: 3px;
+            height: 24px;
+            background-color: #000;
+            left: 14.5px;
+            top: -4px;
+            transform-origin: bottom center;
+            z-index: 1;
+        }
+
+        .temp-circle {
+            position: absolute;
+            bottom: 0;
+            left: 2px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            color: #fff;
+            font-weight: bold;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .info-box { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.2); 
+            z-index: 1000; 
+            font-size: 12px; 
+        }
     </style>
 </head>
 <body>
@@ -89,13 +131,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Imposta la tua password qui (o l'hash SHA-256 della password per maggiore sicurezza)
         const PASSWORD_CORRETTA = "Meteo2026!";
 
         function verificaPassword() {
             const inserita = document.getElementById('password-input').value;
             if (inserita === PASSWORD_CORRETTA) {
-                // Nasconde il modale di login e carica la mappa
                 document.getElementById('login-overlay').style.display = 'none';
                 inizializzaMappa();
             } else {
@@ -103,7 +143,6 @@
             }
         }
 
-        // Permette di inviare con il tasto Invio da tastiera
         document.getElementById('password-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') verificaPassword();
         });
@@ -111,11 +150,10 @@
         function inizializzaMappa() {
             const map = L.map('map').setView([40.63, 17.94], 11);
 
-          // Sostituisci il vecchio tileLayer di CartoDB con questo di OpenStreetMap standard:
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    maxZoom: 19
-}).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
 
             function getTempColor(temp) {
                 if (temp < 15) return "#0011ff";
@@ -129,6 +167,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
             function loadMeteoData() {
                 fetch('data/meteo_latest.json?t=' + new Date().getTime())
+                    .title = "Meteo Data"
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
@@ -149,7 +188,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                         <div class="temp-circle" style="background-color: ${color};">${tempVal}</div>
                                     `,
                                     iconSize: [32, 32],
-                                    iconAnchor: [16, 16]
+                                    iconAnchor: [16, 18], // Centrato geometricamente sul cerchio della temperatura
+                                    popupAnchor: [0, -18]
                                 });
 
                                 const marker = L.marker(latlng, { icon: customIcon });
