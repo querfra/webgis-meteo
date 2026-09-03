@@ -130,34 +130,23 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
-      const HASH_CORRETTO = "3858421c9751e33c82d4310d54024227090b8f41e57c6b9e27c1777b70ec08ad";
+        // Password in chiaro per test immediato e funzionamento garantito
+        const PASSWORD_CORRETTA = "meteo2026";
 
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function verificaPassword() {
+        function verificaPassword() {
             const errorDiv = document.getElementById('error-msg');
             errorDiv.style.display = 'none';
             
-            try {
-                const inserita = document.getElementById('password-input').value;
-                const hashInserito = await sha256(inserita);
-                
-                if (hashInserito === HASH_CORRETTO) {
-                    document.getElementById('login-overlay').style.display = 'none';
-                    inizializzaMappa();
-                } else {
-                    errorDiv.innerText = "Password errata!";
-                    errorDiv.style.display = 'block';
-                }
-            } catch (err) {
-                console.error("Errore crittografico:", err);
-                errorDiv.innerText = "Errore di sistema nel login.";
+            const inserita = document.getElementById('password-input').value;
+            
+            if (inserita === PASSWORD_CORRETTA) {
+                document.getElementById('login-overlay').style.display = 'none';
+                inizializzaMappa();
+            } else {
+                errorDiv.innerText = "Password errata!";
                 errorDiv.style.display = 'block';
             }
         }
