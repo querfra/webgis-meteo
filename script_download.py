@@ -45,15 +45,22 @@ for station_id in STATION_IDS:
                             "type": "Point",
                             "coordinates": [lon, lat]
                         },
-                        "properties": {
-                            "station_id": station_id,
-                            "neighborhood": obs.get('neighborhood', ''),
-                            "temp": temp,
-                            "humidity": obs.get('humidity'),
-                            "wind_dir": wind_dir,
-                            "wind_speed": metric.get('windSpeed'),
-                            "time": obs.get('obsTimeLocal', '')
-                        }
+                    properties = {
+    "station_id": station.get("stationID"),
+    "neighborhood": station.get("neighborhood"),
+    "time": station.get("obsTimeLocal"),
+    "temp": data_metric.get("temp"),
+    "humidity": data_metric.get("humidity"),
+    "wind_speed": data_metric.get("windSpeed"),
+    "wind_gust": data_metric.get("windGust"),
+    "wind_dir": data_metric.get("winddir"),
+    "pressure": data_metric.get("pressure"),
+    "precip_rate": data_metric.get("precipRate"),
+    "precip_total": data_metric.get("precipTotal"),
+    "dewpoint": data_metric.get("dewpoint"),
+    "solar_radiation": data.get("solarRadiation"),
+    "uv": data.get("uv")
+}
                     }
                     geojson_features.append(feature)
     except Exception as e:
