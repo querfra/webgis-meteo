@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGIS Meteo - Riservato</title>
+    <title>WebGIS Meteo - Brindisi</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -11,52 +11,6 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
         #map { width: 100%; height: 100vh; }
-        
-        /* Overlay del Form di Login */
-        #login-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .login-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 300px;
-        }
-
-        .login-card h2 { margin-top: 0; color: #1e293b; font-size: 20px; }
-        .login-card input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .login-card button {
-            width: 100%;
-            padding: 10px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .login-card button:hover { background: #1d4ed8; }
-        #error-msg { color: #dc2626; font-size: 12px; display: none; margin-top: 10px; }
 
         /* Stili Simbolo Meteo */
         .meteo-marker {
@@ -109,17 +63,6 @@
 </head>
 <body>
 
-    <!-- Overlay di Login -->
-    <div id="login-overlay">
-        <div class="login-card">
-            <h2>Area Riservata WebGIS</h2>
-            <p style="font-size: 12px; color: #64748b;">Inserisci la password per accedere</p>
-            <input type="password" id="password-input" placeholder="Password...">
-            <button onclick="verificaPassword()">Accedi</button>
-            <div id="error-msg">Password errata!</div>
-        </div>
-    </div>
-
     <!-- Mappa e Contenuto -->
     <div id="info" class="info-box">
         <strong>WebGIS Meteo</strong><br>
@@ -130,31 +73,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
     <script>
-        // Password in chiaro per test immediato e funzionamento garantito
-        const PASSWORD_CORRETTA = "meteo2026";
-
-        function verificaPassword() {
-            const errorDiv = document.getElementById('error-msg');
-            errorDiv.style.display = 'none';
-            
-            const inserita = document.getElementById('password-input').value;
-            
-            if (inserita === PASSWORD_CORRETTA) {
-                document.getElementById('login-overlay').style.display = 'none';
-                inizializzaMappa();
-            } else {
-                errorDiv.innerText = "Password errata!";
-                errorDiv.style.display = 'block';
-            }
-        }
-
-        document.getElementById('password-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') verificaPassword();
-        });
-
         function inizializzaMappa() {
             const map = L.map('map').setView([40.63, 17.94], 11);
 
@@ -190,7 +109,7 @@
                                 const props = feature.properties;
                                 const color = getTempColor(props.temp);
                                 const windDir = props.wind_dir || 0;
-                                const tempVal = props.temp.toFixed(1);
+                                const tempVal = props.temp !== undefined ? props.temp.toFixed(1) : 'N/D';
 
                                 const customIcon = L.divIcon({
                                     className: 'meteo-marker',
@@ -233,6 +152,9 @@
             loadMeteoData();
             setInterval(loadMeteoData, 60000);
         }
+
+        // Avvia la mappa direttamente all'apertura della pagina
+        window.onload = inizializzaMappa;
     </script>
 </body>
 </html>
