@@ -1,34 +1,31 @@
-name: Aggiornamento Meteo WebGIS
+name: Aggiorna Meteo
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    - cron: '*/10 * * * *'  # Esegue lo script ogni 10 minuti
+  workflow_dispatch: # Permette anche l'avvio manuale
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout codice
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Configura Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.10'
+
+      - name: Installa dipendenze (se necessarie)
+        run: pip install requests
 
       - name: Scarica dati meteo
         run: python script_download.py
 
-      - name: Configura utente Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
       - name: Salva e pubblica i dati aggiornati
         run: |
-          git add data/meteo_latest.json
-          git diff --staged --quiet || git commit -m "Auto-update dati meteo"
-          git push
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add data/meteo_latest.json archive/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Aggiornamento automatico meteo e archivio" && git push)
