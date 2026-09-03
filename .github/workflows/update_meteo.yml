@@ -1,4 +1,5 @@
 name: Aggiornamento Meteo WebGIS
+name: Aggiornamento Meteo WebGIS
 
 on:
   schedule:
@@ -12,10 +13,10 @@ jobs:
       contents: write
     steps:
       - name: Checkout codice
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configura Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
