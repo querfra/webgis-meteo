@@ -4,22 +4,27 @@ from datetime import datetime
 import requests
 
 # --- CONFIGURAZIONE ---
-API_KEY = "8231f09cfdc44e68b1f09cfdc46e686b"
-# Inserisci qui l'elenco delle stazioni di Brindisi e dintorni che vuoi monitorare
+API_KEY = "LA_TUA_API_KEY_DI_WEATHER_UNDERGROUND"
 STATION_IDS = [
- "IBRIND44", "IBRIND51", "IBRIND57", "IBRIND60", "IBRIND14",
-    "IBRIND47", "IBRIND37", "IBRIND55", "IBRIND32", "ISANPI44",
-    "IPUGLIAL9", "ISANVI152", "ICAROV30"
+    "IBRINDISI2", # Sostituisci o aggiungi qui i codici delle tue stazioni
 ]
 
 features = []
 
-# Cicla le stazioni per scaricare i dati correnti
 for station_id in STATION_IDS:
-    url = f"https://api.weather.com/v2/pws/observations/current?stationId={station_id}&format=json&units=m&apiKey={API_KEY}"
+    url = "https://api.weather.com/v2/pws/observations/current"
+    
+    # Parametri completi con il parametro per forzare i decimali
+    params = {
+        "stationId": station_id,
+        "format": "json",
+        "units": "m",
+        "numericPrecision": "decimal",
+        "apiKey": API_KEY
+    }
     
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, params=params, timeout=10)
         if response.status_code == 200:
             data = response.json()
             observations = data.get("observations", [])
@@ -29,33 +34,39 @@ for station_id in STATION_IDS:
                 lat = obs.get("lat")
                 lon = obs.get("lon")
                 
-                # Se la stazione restituisce le coordinate valide
                 if lat is not None and lon is not None:
-                    # Estrazione metrica (gestione sicura dei dati metrici 'metric')
                     metric = obs.get("metric", {})
                     
+                    # Funzione di utilità per convertire in float in modo sicuro
+                    def to_float(val):
+                        if val is not None:
+                            try:
+                                return float(val)
+                            except (ValueError, TypeError):
+                                return None
+                        return None
+
                     feature = {
                         "type": "Feature",
                         "geometry": {
                             "type": "Point",
-                            "coordinates": [lon, lat]
+                            "coordinates": [float(lon), float(lat)]
                         },
                         "properties": {
                             "station_id": station_id,
                             "neighborhood": obs.get("neighborhood", "N/D"),
                             "time": obs.get("obsTimeLocal", "N/D"),
-                            "temp": metric.get("temp"),
-                            "humidity": obs.get("humidity"),
-                            "wind_speed": metric.get("windSpeed"),
-                            "wind_gust": metric.get("windGust"),
-                            "wind_dir": obs.get("winddir"),
-                            "pressure": metric.get("pressure"),
-                            "precip_rate": metric.get("precipRate"),
-                            "precip_total": metric.get("precipTotal"),
-                            "dewpt": metric.get("dewpt"), # Mappato come dewpoint nel popup
-                            "dewpoint": metric.get("dewpt"),
-                            "solar_radiation": obs.get("solarRadiation"),
-                            "uv": obs.get("uv")
+                            "temp": to_float(metric.get("temp")),
+                            "humidity": to_float(obs.get("humidity")),
+                            "wind_speed": to_float(metric.get("windSpeed")),
+                            "wind_gust": to_float(metric.get("windGust")),
+                            "wind_dir": to_float(obs.get("winddir")),
+                            "pressure": to_float(metric.get("pressure")),
+                            "precip_rate": to_float(metric.get("precipRate")),
+                            "precip_total": to_float(metric.get("precipTotal")),
+                            "dewpoint": to_float(metric.get("dewpt")),
+                            "solar_radiation": to_float(obs.get("solarRadiation")),
+                            "uv": to_float(obs.get("uv"))
                         }
                     }
                     features.append(feature)
@@ -64,21 +75,19 @@ for station_id in STATION_IDS:
     except Exception as e:
         print(f"Errore di connessione per la stazione {station_id}: {e}")
 
-# 1. Creazione dell'oggetto GeoJSON corrente (latest)
+# 1. Aggiornamento file latest (ogni 5 minuti via GitHub Actions)
 latest_data = {
     "type": "FeatureCollection",
     "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     "features": features
 }
 
-# Assicurati che la cartella 'data' esista e salva il file latest
 os.makedirs("data", exist_ok=True)
 with open("data/meteo_latest.json", "w", encoding="utf-8") as f:
     json.dump(latest_data, f, ensure_ascii=False, indent=2)
 
 
 # --- GESTIONE ARCHIVIO STORICO (OGNI 10 MINUTI) ---
-
 if features:
     archive_dir = "archive"
     os.makedirs(archive_dir, exist_ok=True)
@@ -94,15 +103,28 @@ if features:
         except Exception as e:
             print(f"Errore lettura archivio esistente: {e}")
 
-    timestamp_archiviazione = datetime.now().isoformat()
-    for feature in features:
-        archived_feature = json.loads(json.dumps(feature))
-        archived_feature["properties"]["archived_at"] = timestamp_archiviazione
-        archive_data["features"].append(archived_feature)
+    # Controllo temporale: archivia solo se sono trascorsi almeno 9 minuti dall'ultimo salvataggio
+    esegui_archivio = True
+    if archive_data["features"]:
+        ultimo_record = archive_data["features"][-1]
+        ultima_data_str = ultimo_record.get("properties", {}).get("archived_at")
+        if ultima_data_str:
+            ultima_data = datetime.fromisoformat(ultima_data_str)
+            differenza_minuti = (datetime.now() - ultima_data).total_seconds() / 60
+            if differenza_minuti < 9:
+                esegui_archivio = False
 
-    with open(archive_file, "w", encoding="utf-8") as f:
-        json.dump(archive_data, f, ensure_ascii=False, indent=2)
+    if esegui_archivio:
+        timestamp_archiviazione = datetime.now().isoformat()
+        for feature in features:
+            archived_feature = json.loads(json.dumps(feature))
+            archived_feature["properties"]["archived_at"] = timestamp_archiviazione
+            archive_data["features"].append(archived_feature)
 
-    print(f"Scaricati e archiviati con successo {len(features)} record.")
+        with open(archive_file, "w", encoding="utf-8") as f:
+            json.dump(archive_data, f, ensure_ascii=False, indent=2)
+        print("Archivio storico aggiornato con successo con i decimali.")
+    else:
+        print("Saltato l'aggiornamento dell'archivio (intervallo di 10 minuti non ancora raggiunto).")
 else:
     print("Nessun dato valido scaricato in questa esecuzione.")
