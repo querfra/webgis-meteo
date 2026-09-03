@@ -22,10 +22,13 @@ jobs:
       - name: Scarica dati meteo
         run: python script_download.py
 
-      - name: Salva e pubblica i dati aggiornati
+      - name: Configura utente Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Salva e pubblica i dati aggiornati
+        run: |
           git add data/meteo_latest.json
-          git commit -m "Auto-update dati meteo [skip ci]" || exit 0
+          git diff --staged --quiet || git commit -m "Auto-update dati meteo"
           git push
