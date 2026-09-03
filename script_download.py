@@ -45,8 +45,8 @@ for station_id in STATION_IDS:
                             "type": "Point",
                             "coordinates": [lon, lat]
                         },
-                    properties = {
-    "station_id": station.get("stationID"),
+                    properties = {  
+                        "station_id": station.get("stationID"),
     "neighborhood": station.get("neighborhood"),
     "time": station.get("obsTimeLocal"),
     "temp": data_metric.get("temp"),
@@ -60,7 +60,6 @@ for station_id in STATION_IDS:
     "dewpoint": data_metric.get("dewpoint"),
     "solar_radiation": data.get("solarRadiation"),
     "uv": data.get("uv")
-}
                     }
                     geojson_features.append(feature)
     except Exception as e:
