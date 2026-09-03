@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS Meteo - Riservato</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
+        #map { width: 100%; height: 100vh; }
+        
+        /* Overlay del Form di Login */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 300px;
+        }
+
+        .login-card h2 { margin-top: 0; color: #1e293b; font-size: 20px; }
+        .login-card input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 10px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .login-card button:hover { background: #1d4ed8; }
+        #error-msg { color: #dc2626; font-size: 12px; display: none; margin-top: 10px; }
+
+        /* Stili Simbolo Meteo */
+        .meteo-marker { position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .wind-bar { position: absolute; width: 3px; height: 24px; background-color: #000; top: -6px; transform-origin: bottom center; z-index: 1; }
+        .temp-circle { position: relative; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #000; color: #fff; font-weight: bold; font-size: 11px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .info-box { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.9); padding: 10px 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay di Login -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>Area Riservata WebGIS</h2>
+            <p style="font-size: 12px; color: #64748b;">Inserisci la password per accedere</p>
+            <input type="password" id="password-input" placeholder="Password...">
+            <button onclick="verificaPassword()">Accedi</button>
+            <div id="error-msg">Password errata!</div>
+        </div>
+    </div>
+
+    <!-- Mappa e Contenuto -->
+    <div id="info" class="info-box">
+        <strong>WebGIS Meteo</strong><br>
+        <span id="last-update">Caricamento dati...</span>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Imposta la tua password qui (o l'hash SHA-256 della password per maggiore sicurezza)
+        const PASSWORD_CORRETTA = "Meteo2026!";
+
+        function verificaPassword() {
+            const inserita = document.getElementById('password-input').value;
+            if (inserita === PASSWORD_CORRETTA) {
+                // Nasconde il modale di login e carica la mappa
+                document.getElementById('login-overlay').style.display = 'none';
+                inizializzaMappa();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // Permette di inviare con il tasto Invio da tastiera
+        document.getElementById('password-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verificaPassword();
+        });
+
+        function inizializzaMappa() {
+            const map = L.map('map').setView([40.63, 17.94], 11);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 19
+            }).addTo(map);
+
+            function getTempColor(temp) {
+                if (temp < 15) return "#0011ff";
+                if (temp < 20) return "#400cbf";
+                if (temp < 25) return "#800880";
+                if (temp < 30) return "#bf0440";
+                return "#ff0000";
+            }
+
+            let geojsonLayer;
+
+            function loadMeteoData() {
+                fetch('data/meteo_latest.json?t=' + new Date().getTime())
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
+
+                        if (geojsonLayer) map.removeLayer(geojsonLayer);
+
+                        geojsonLayer = L.geoJSON(data, {
+                            pointToLayer: function (feature, latlng) {
+                                const props = feature.properties;
+                                const color = getTempColor(props.temp);
+                                const windDir = props.wind_dir || 0;
+                                const tempVal = props.temp.toFixed(1);
+
+                                const customIcon = L.divIcon({
+                                    className: 'meteo-marker',
+                                    html: `
+                                        <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
+                                        <div class="temp-circle" style="background-color: ${color};">${tempVal}</div>
+                                    `,
+                                    iconSize: [32, 32],
+                                    iconAnchor: [16, 16]
+                                });
+
+                                const marker = L.marker(latlng, { icon: customIcon });
+
+                                marker.bindPopup(`
+                                    <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood})<br>
+                                    <strong>Temperatura:</strong> ${props.temp} °C<br>
+                                    <strong>Umidità:</strong> ${props.humidity}%<br>
+                                    <strong>Vento:</strong> ${props.wind_speed} km/h (${props.wind_dir}°)<br>
+                                    <strong>Ora:</strong> ${props.time}
+                                `);
+
+                                return marker;
+                            }
+                        }).addTo(map);
+                    })
+                    .catch(err => console.error("Errore caricamento dati:", err));
+            }
+
+            loadMeteoData();
+            setInterval(loadMeteoData, 60000);
+        }
+    </script>
+</body>
+</html>
