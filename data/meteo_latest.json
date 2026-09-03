@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "updated_at": "2026-09-03 11:21:04",
+  "updated_at": "2026-09-03 11:29:37",
   "features": [
     {
       "type": "Feature",
@@ -14,11 +14,11 @@
       "properties": {
         "station_id": "IBRIND44",
         "neighborhood": "Brindisi",
-        "temp": 29.2,
-        "humidity": 65.0,
-        "wind_dir": 4,
-        "wind_speed": 24.0,
-        "time": "2026-09-03 13:20:49"
+        "temp": 28.7,
+        "humidity": 67.0,
+        "wind_dir": 330,
+        "wind_speed": 32.0,
+        "time": "2026-09-03 13:29:25"
       }
     },
     {
@@ -35,9 +35,9 @@
         "neighborhood": "Brindisi",
         "temp": 28.4,
         "humidity": 77.0,
-        "wind_dir": 313,
-        "wind_speed": 23.8,
-        "time": "2026-09-03 13:20:56"
+        "wind_dir": 359,
+        "wind_speed": 21.6,
+        "time": "2026-09-03 13:29:28"
       }
     },
     {
@@ -52,11 +52,11 @@
       "properties": {
         "station_id": "IBRIND57",
         "neighborhood": "Betlemme",
-        "temp": 29.9,
-        "humidity": 74.0,
-        "wind_dir": 319,
-        "wind_speed": 15.1,
-        "time": "2026-09-03 13:19:04"
+        "temp": 30.3,
+        "humidity": 73.0,
+        "wind_dir": 336,
+        "wind_speed": 11.9,
+        "time": "2026-09-03 13:27:27"
       }
     },
     {
@@ -71,11 +71,11 @@
       "properties": {
         "station_id": "IBRIND60",
         "neighborhood": "Materdomini",
-        "temp": 32.5,
-        "humidity": 66.0,
-        "wind_dir": 277,
-        "wind_speed": 10.9,
-        "time": "2026-09-03 13:20:09"
+        "temp": 31.6,
+        "humidity": 68.0,
+        "wind_dir": 270,
+        "wind_speed": 23.0,
+        "time": "2026-09-03 13:28:49"
       }
     },
     {
@@ -90,11 +90,11 @@
       "properties": {
         "station_id": "IBRIND14",
         "neighborhood": "Brindisi",
-        "temp": 30.8,
-        "humidity": 69.0,
-        "wind_dir": 337,
-        "wind_speed": 9.7,
-        "time": "2026-09-03 13:20:58"
+        "temp": 30.3,
+        "humidity": 70.0,
+        "wind_dir": 331,
+        "wind_speed": 5.0,
+        "time": "2026-09-03 13:29:30"
       }
     },
     {
@@ -109,11 +109,11 @@
       "properties": {
         "station_id": "IBRIND47",
         "neighborhood": "Brindisi",
-        "temp": 29.7,
+        "temp": 29.3,
         "humidity": 72.0,
-        "wind_dir": 338,
-        "wind_speed": 25.3,
-        "time": "2026-09-03 13:20:51"
+        "wind_dir": 325,
+        "wind_speed": 27.0,
+        "time": "2026-09-03 13:28:51"
       }
     },
     {
@@ -128,11 +128,11 @@
       "properties": {
         "station_id": "IBRIND37",
         "neighborhood": "Brindisi",
-        "temp": 32.7,
-        "humidity": 63.0,
+        "temp": 31.7,
+        "humidity": 65.0,
         "wind_dir": 0,
         "wind_speed": 0.0,
-        "time": "2026-09-03 13:20:55"
+        "time": "2026-09-03 13:29:31"
       }
     },
     {
@@ -147,11 +147,11 @@
       "properties": {
         "station_id": "IBRIND55",
         "neighborhood": "Brindisi",
-        "temp": 30.8,
+        "temp": 30.3,
         "humidity": 68.0,
-        "wind_dir": 298,
-        "wind_speed": 12.1,
-        "time": "2026-09-03 13:20:08"
+        "wind_dir": 330,
+        "wind_speed": 16.6,
+        "time": "2026-09-03 13:28:26"
       }
     },
     {
@@ -166,11 +166,11 @@
       "properties": {
         "station_id": "IBRIND32",
         "neighborhood": "Cerano",
-        "temp": 30.1,
+        "temp": 29.9,
         "humidity": 75.0,
-        "wind_dir": 315,
-        "wind_speed": 16.9,
-        "time": "2026-09-03 13:20:56"
+        "wind_dir": 135,
+        "wind_speed": 12.2,
+        "time": "2026-09-03 13:28:56"
       }
     },
     {
@@ -185,11 +185,11 @@
       "properties": {
         "station_id": "ISANPI44",
         "neighborhood": "San Pietro Vernotico",
-        "temp": 30.8,
+        "temp": 31.3,
         "humidity": 61.0,
-        "wind_dir": 1,
-        "wind_speed": 14.8,
-        "time": "2026-09-03 13:20:55"
+        "wind_dir": 338,
+        "wind_speed": 8.3,
+        "time": "2026-09-03 13:29:26"
       }
     },
     {
@@ -205,10 +205,10 @@
         "station_id": "IPUGLIAL9",
         "neighborhood": "LATIANO",
         "temp": 30.3,
-        "humidity": 66.0,
-        "wind_dir": 327,
+        "humidity": 62.0,
+        "wind_dir": 289,
         "wind_speed": 20.4,
-        "time": "2026-09-03 13:20:58"
+        "time": "2026-09-03 13:29:33"
       }
     },
     {
@@ -223,11 +223,11 @@
       "properties": {
         "station_id": "ISANVI152",
         "neighborhood": "San Vito dei Normanni",
-        "temp": 32.0,
-        "humidity": 61.0,
-        "wind_dir": 229,
-        "wind_speed": 4.7,
-        "time": "2026-09-03 13:19:12"
+        "temp": 31.9,
+        "humidity": 58.0,
+        "wind_dir": 164,
+        "wind_speed": 12.2,
+        "time": "2026-09-03 13:27:33"
       }
     },
     {
@@ -242,11 +242,11 @@
       "properties": {
         "station_id": "ICAROV30",
         "neighborhood": "Carovigno",
-        "temp": 28.8,
-        "humidity": 68.0,
-        "wind_dir": 297,
-        "wind_speed": 20.4,
-        "time": "2026-09-03 13:20:50"
+        "temp": 28.6,
+        "humidity": 67.0,
+        "wind_dir": 323,
+        "wind_speed": 36.7,
+        "time": "2026-09-03 13:29:26"
       }
     }
   ]
