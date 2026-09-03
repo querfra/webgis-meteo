@@ -4,9 +4,11 @@ from datetime import datetime
 import requests
 
 # --- CONFIGURAZIONE ---
-API_KEY = "LA_TUA_API_KEY_DI_WEATHER_UNDERGROUND"
+API_KEY = "8231f09cfdc44e68b1f09cfdc46e686b"
 STATION_IDS = [
-    "IBRINDISI2", # Sostituisci o aggiungi qui i codici delle tue stazioni
+    "IBRIND44", "IBRIND51", "IBRIND57", "IBRIND60", "IBRIND14",
+    "IBRIND47", "IBRIND37", "IBRIND55", "IBRIND32", "ISANPI44",
+    "IPUGLIAL9", "ISANVI152", "ICAROV30"
 ]
 
 features = []
