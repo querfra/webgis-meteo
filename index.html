@@ -131,21 +131,33 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        const PASSWORD_CORRETTA = "Meteo2026!";
+   <script>
+    
+    const HASH_CORRETTO = "52367c3ff5c13b2c6a0c495bf41846b432104199c75cb79ec7d30f5a7a72d3e5";
 
-        function verificaPassword() {
-            const inserita = document.getElementById('password-input').value;
-            if (inserita === PASSWORD_CORRETTA) {
-                document.getElementById('login-overlay').style.display = 'none';
-                inizializzaMappa();
-            } else {
-                document.getElementById('error-msg').style.display = 'block';
-            }
+    // Funzione di utilità per calcolare l'hash SHA-256 della password digitata dall'utente
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function verificaPassword() {
+        const inserita = document.getElementById('password-input').value;
+        const hashInserito = await sha256(inserita);
+        
+        if (hashInserito === HASH_CORRETTO) {
+            document.getElementById('login-overlay').style.display = 'none';
+            inizializzaMappa();
+        } else {
+            document.getElementById('error-msg').style.display = 'block';
         }
+    }
 
-        document.getElementById('password-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') verificaPassword();
-        });
+    document.getElementById('password-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') verificaPassword();
+    });
 
         function inizializzaMappa() {
             const map = L.map('map').setView([40.63, 17.94], 11);
