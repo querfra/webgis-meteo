@@ -9477,6 +9477,357 @@
         "uv": 1.0,
         "archived_at": "2026-09-04T06:50:23.237628"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.940099,
+          40.6439
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND44",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:07:02",
+        "temp": 27.3,
+        "humidity": 71.0,
+        "wind_speed": 10.0,
+        "wind_gust": 11.1,
+        "wind_dir": 284.0,
+        "pressure": 1017.27,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 21.6,
+        "solar_radiation": 345.2,
+        "uv": 2.8,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.810641,
+          40.703055
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND51",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:07:03",
+        "temp": 27.6,
+        "humidity": 77.0,
+        "wind_speed": 22.3,
+        "wind_gust": 29.5,
+        "wind_dir": 332.0,
+        "pressure": 1012.19,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.2,
+        "solar_radiation": 300.1,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.941779,
+          40.667191
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND57",
+        "neighborhood": "Betlemme",
+        "time": "2026-09-04 09:03:29",
+        "temp": 28.1,
+        "humidity": 81.0,
+        "wind_speed": 11.9,
+        "wind_gust": 18.0,
+        "wind_dir": 28.0,
+        "pressure": 1013.88,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 24.5,
+        "solar_radiation": 332.5,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.956,
+          40.655
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND60",
+        "neighborhood": "Materdomini",
+        "time": "2026-09-04 09:06:40",
+        "temp": 29.7,
+        "humidity": 75.0,
+        "wind_speed": 9.5,
+        "wind_gust": 23.0,
+        "wind_dir": 306.0,
+        "pressure": 1014.22,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 24.7,
+        "solar_radiation": 7.6,
+        "uv": 1.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.945,
+          40.649
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND14",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:06:49",
+        "temp": 28.7,
+        "humidity": 75.0,
+        "wind_speed": 11.1,
+        "wind_gust": 14.8,
+        "wind_dir": 304.0,
+        "pressure": 1017.91,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.9,
+        "solar_radiation": 241.3,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.93326,
+          40.637129
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND47",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:06:51",
+        "temp": 28.2,
+        "humidity": 76.0,
+        "wind_speed": 18.0,
+        "wind_gust": 20.1,
+        "wind_dir": 30.0,
+        "pressure": 1027.77,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.5,
+        "solar_radiation": 362.4,
+        "uv": 3.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.932,
+          40.626
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND37",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:06:54",
+        "temp": 29.7,
+        "humidity": 70.0,
+        "wind_speed": 0.0,
+        "wind_gust": 0.0,
+        "wind_dir": null,
+        "pressure": 1015.24,
+        "precip_rate": null,
+        "precip_total": null,
+        "dewpoint": 23.6,
+        "solar_radiation": null,
+        "uv": null,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.922,
+          40.618
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND55",
+        "neighborhood": "Brindisi",
+        "time": "2026-09-04 09:06:23",
+        "temp": 29.4,
+        "humidity": 70.0,
+        "wind_speed": 13.8,
+        "wind_gust": 13.8,
+        "wind_dir": 250.0,
+        "pressure": 1013.88,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.3,
+        "solar_radiation": 312.8,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.034217,
+          40.571363
+        ]
+      },
+      "properties": {
+        "station_id": "IBRIND32",
+        "neighborhood": "Cerano",
+        "time": "2026-09-04 09:06:57",
+        "temp": 29.4,
+        "humidity": 77.0,
+        "wind_speed": 10.1,
+        "wind_gust": 16.6,
+        "wind_dir": 0.0,
+        "pressure": 1016.59,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 24.9,
+        "solar_radiation": null,
+        "uv": null,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.995491,
+          40.492546
+        ]
+      },
+      "properties": {
+        "station_id": "ISANPI44",
+        "neighborhood": "San Pietro Vernotico",
+        "time": "2026-09-04 09:07:03",
+        "temp": 28.7,
+        "humidity": 71.0,
+        "wind_speed": 6.5,
+        "wind_gust": 20.5,
+        "wind_dir": 337.0,
+        "pressure": 1011.31,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.0,
+        "solar_radiation": 241.0,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.711012,
+          40.55159
+        ]
+      },
+      "properties": {
+        "station_id": "IPUGLIAL9",
+        "neighborhood": "LATIANO",
+        "time": "2026-09-04 09:06:58",
+        "temp": 27.9,
+        "humidity": 75.0,
+        "wind_speed": 18.5,
+        "wind_gust": 14.5,
+        "wind_dir": 305.0,
+        "pressure": 1017.0,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 23.1,
+        "solar_radiation": null,
+        "uv": null,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.695544,
+          40.658058
+        ]
+      },
+      "properties": {
+        "station_id": "ISANVI152",
+        "neighborhood": "San Vito dei Normanni",
+        "time": "2026-09-04 09:03:02",
+        "temp": 29.0,
+        "humidity": 69.0,
+        "wind_speed": 18.3,
+        "wind_gust": 28.5,
+        "wind_dir": 195.0,
+        "pressure": 1012.53,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 22.6,
+        "solar_radiation": 211.6,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          17.766,
+          40.682
+        ]
+      },
+      "properties": {
+        "station_id": "ICAROV30",
+        "neighborhood": "Carovigno",
+        "time": "2026-09-04 09:07:07",
+        "temp": 27.4,
+        "humidity": 69.0,
+        "wind_speed": 19.3,
+        "wind_gust": 22.2,
+        "wind_dir": 272.0,
+        "pressure": 1014.56,
+        "precip_rate": 0.0,
+        "precip_total": 0.0,
+        "dewpoint": 21.2,
+        "solar_radiation": 365.3,
+        "uv": 2.0,
+        "archived_at": "2026-09-04T07:07:09.497274"
+      }
     }
   ]
 }
