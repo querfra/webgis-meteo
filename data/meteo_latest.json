@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "updated_at": "2026-09-04 13:43:40",
+  "updated_at": "2026-09-04 13:55:51",
   "features": [
     {
       "type": "Feature",
@@ -14,18 +14,18 @@
       "properties": {
         "station_id": "IBRIND44",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:43:25",
-        "temp": 30.0,
-        "humidity": 45.0,
-        "wind_speed": 10.0,
-        "wind_gust": 10.8,
+        "time": "2026-09-04 15:55:37",
+        "temp": 29.8,
+        "humidity": 44.0,
+        "wind_speed": 8.5,
+        "wind_gust": 8.9,
         "wind_dir": 330.0,
-        "pressure": 1017.95,
+        "pressure": 1017.61,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 16.8,
-        "solar_radiation": 463.7,
-        "uv": 4.2
+        "dewpoint": 16.2,
+        "solar_radiation": 466.7,
+        "uv": 3.7
       }
     },
     {
@@ -40,17 +40,17 @@
       "properties": {
         "station_id": "IBRIND51",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:43:34",
-        "temp": 29.3,
-        "humidity": 60.0,
-        "wind_speed": 17.6,
-        "wind_gust": 20.2,
-        "wind_dir": 344.0,
+        "time": "2026-09-04 15:55:36",
+        "temp": 29.1,
+        "humidity": 62.0,
+        "wind_speed": 16.9,
+        "wind_gust": 18.4,
+        "wind_dir": 34.0,
         "pressure": 1012.6,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 20.8,
-        "solar_radiation": 382.9,
+        "dewpoint": 21.1,
+        "solar_radiation": 370.9,
         "uv": 3.0
       }
     },
@@ -66,17 +66,17 @@
       "properties": {
         "station_id": "IBRIND57",
         "neighborhood": "Betlemme",
-        "time": "2026-09-04 15:39:16",
+        "time": "2026-09-04 15:51:35",
         "temp": 30.7,
         "humidity": 54.0,
-        "wind_speed": 9.0,
-        "wind_gust": 10.8,
-        "wind_dir": 119.0,
-        "pressure": 1014.56,
+        "wind_speed": 13.7,
+        "wind_gust": 16.3,
+        "wind_dir": 314.0,
+        "pressure": 1014.22,
         "precip_rate": 0.0,
         "precip_total": 0.0,
         "dewpoint": 20.3,
-        "solar_radiation": 499.3,
+        "solar_radiation": 461.1,
         "uv": 5.0
       }
     },
@@ -92,17 +92,17 @@
       "properties": {
         "station_id": "IBRIND60",
         "neighborhood": "Materdomini",
-        "time": "2026-09-04 15:43:25",
-        "temp": 33.0,
+        "time": "2026-09-04 15:55:20",
+        "temp": 32.7,
         "humidity": 51.0,
-        "wind_speed": 7.9,
-        "wind_gust": 10.3,
-        "wind_dir": 248.0,
+        "wind_speed": 9.3,
+        "wind_gust": 15.8,
+        "wind_dir": 329.0,
         "pressure": 1014.56,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 21.4,
-        "solar_radiation": 10.5,
+        "dewpoint": 21.1,
+        "solar_radiation": 9.3,
         "uv": 1.0
       }
     },
@@ -118,18 +118,18 @@
       "properties": {
         "station_id": "IBRIND14",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:43:31",
-        "temp": 31.5,
-        "humidity": 49.0,
+        "time": "2026-09-04 15:55:37",
+        "temp": 31.7,
+        "humidity": 51.0,
         "wind_speed": 0.0,
         "wind_gust": 0.0,
-        "wind_dir": 24.0,
-        "pressure": 1018.22,
+        "wind_dir": 320.0,
+        "pressure": 1018.12,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 19.5,
-        "solar_radiation": 329.6,
-        "uv": 3.0
+        "dewpoint": 20.4,
+        "solar_radiation": 305.8,
+        "uv": 2.0
       }
     },
     {
@@ -144,18 +144,18 @@
       "properties": {
         "station_id": "IBRIND47",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:42:51",
-        "temp": 30.6,
-        "humidity": 50.0,
-        "wind_speed": 17.2,
-        "wind_gust": 21.2,
-        "wind_dir": 40.0,
+        "time": "2026-09-04 15:54:51",
+        "temp": 30.5,
+        "humidity": 51.0,
+        "wind_speed": 24.5,
+        "wind_gust": 28.5,
+        "wind_dir": 19.0,
         "pressure": 1028.45,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 18.9,
-        "solar_radiation": 250.6,
-        "uv": 3.0
+        "dewpoint": 19.2,
+        "solar_radiation": 237.6,
+        "uv": 2.0
       }
     },
     {
@@ -170,8 +170,8 @@
       "properties": {
         "station_id": "IBRIND37",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:43:30",
-        "temp": 31.6,
+        "time": "2026-09-04 15:55:42",
+        "temp": 32.2,
         "humidity": 45.0,
         "wind_speed": 0.0,
         "wind_gust": 0.0,
@@ -179,7 +179,7 @@
         "pressure": 1015.92,
         "precip_rate": null,
         "precip_total": null,
-        "dewpoint": 18.3,
+        "dewpoint": 18.8,
         "solar_radiation": null,
         "uv": null
       }
@@ -196,17 +196,17 @@
       "properties": {
         "station_id": "IBRIND55",
         "neighborhood": "Brindisi",
-        "time": "2026-09-04 15:43:29",
-        "temp": 31.7,
-        "humidity": 46.0,
-        "wind_speed": 9.0,
-        "wind_gust": 15.8,
-        "wind_dir": 338.0,
+        "time": "2026-09-04 15:55:18",
+        "temp": 31.6,
+        "humidity": 47.0,
+        "wind_speed": 16.6,
+        "wind_gust": 21.4,
+        "wind_dir": 316.0,
         "pressure": 1014.22,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 18.6,
-        "solar_radiation": 441.2,
+        "dewpoint": 18.8,
+        "solar_radiation": 423.2,
         "uv": 3.0
       }
     },
@@ -222,18 +222,18 @@
       "properties": {
         "station_id": "ISANPI44",
         "neighborhood": "San Pietro Vernotico",
-        "time": "2026-09-04 15:43:34",
+        "time": "2026-09-04 15:55:34",
         "temp": 32.6,
-        "humidity": 41.0,
-        "wind_speed": 3.2,
-        "wind_gust": 17.6,
-        "wind_dir": 309.0,
-        "pressure": 1011.99,
+        "humidity": 39.0,
+        "wind_speed": 4.7,
+        "wind_gust": 10.1,
+        "wind_dir": 356.0,
+        "pressure": 1011.89,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 17.7,
-        "solar_radiation": 244.8,
-        "uv": 2.0
+        "dewpoint": 16.9,
+        "solar_radiation": 443.8,
+        "uv": 4.0
       }
     },
     {
@@ -248,16 +248,16 @@
       "properties": {
         "station_id": "IPUGLIAL9",
         "neighborhood": "LATIANO",
-        "time": "2026-09-04 15:43:36",
-        "temp": 31.7,
-        "humidity": 41.0,
+        "time": "2026-09-04 15:55:44",
+        "temp": 31.8,
+        "humidity": 42.0,
         "wind_speed": 18.5,
-        "wind_gust": 17.7,
-        "wind_dir": 279.0,
-        "pressure": 1017.41,
+        "wind_gust": 14.5,
+        "wind_dir": 280.0,
+        "pressure": 1017.2,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 16.8,
+        "dewpoint": 17.3,
         "solar_radiation": null,
         "uv": null
       }
@@ -274,18 +274,18 @@
       "properties": {
         "station_id": "ISANVI152",
         "neighborhood": "San Vito dei Normanni",
-        "time": "2026-09-04 15:38:58",
-        "temp": 32.3,
-        "humidity": 43.0,
-        "wind_speed": 12.2,
-        "wind_gust": 16.3,
-        "wind_dir": 135.0,
+        "time": "2026-09-04 15:51:15",
+        "temp": 32.1,
+        "humidity": 42.0,
+        "wind_speed": 10.8,
+        "wind_gust": 14.0,
+        "wind_dir": 138.0,
         "pressure": 1012.87,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 18.1,
+        "dewpoint": 17.6,
         "solar_radiation": null,
-        "uv": 3.0
+        "uv": 2.0
       }
     },
     {
@@ -300,18 +300,18 @@
       "properties": {
         "station_id": "ICAROV30",
         "neighborhood": "Carovigno",
-        "time": "2026-09-04 15:43:32",
+        "time": "2026-09-04 15:55:44",
         "temp": 30.0,
-        "humidity": 46.0,
-        "wind_speed": 18.3,
-        "wind_gust": 19.8,
-        "wind_dir": 318.0,
+        "humidity": 45.0,
+        "wind_speed": 7.1,
+        "wind_gust": 7.4,
+        "wind_dir": 336.0,
         "pressure": 1014.56,
         "precip_rate": 0.0,
         "precip_total": 0.0,
-        "dewpoint": 17.0,
-        "solar_radiation": 528.5,
-        "uv": 3.0
+        "dewpoint": 16.7,
+        "solar_radiation": 408.6,
+        "uv": 2.0
       }
     }
   ]
