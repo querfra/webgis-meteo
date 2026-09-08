@@ -1,6 +1,5 @@
 {
   "type": "FeatureCollection",
-  "updated_at": "2026-09-08 00:11:15",
   "features": [
     {
       "type": "Feature",
@@ -25,7 +24,8 @@
         "precip_total": 0.0,
         "dewpoint": 20.4,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -51,7 +51,8 @@
         "precip_total": 0.0,
         "dewpoint": 21.2,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -77,7 +78,8 @@
         "precip_total": 0.0,
         "dewpoint": 22.5,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -103,7 +105,8 @@
         "precip_total": 0.0,
         "dewpoint": 23.5,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -129,7 +132,8 @@
         "precip_total": 0.0,
         "dewpoint": 21.8,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -155,7 +159,8 @@
         "precip_total": 0.0,
         "dewpoint": 21.7,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -181,7 +186,8 @@
         "precip_total": null,
         "dewpoint": 21.5,
         "solar_radiation": null,
-        "uv": null
+        "uv": null,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -207,7 +213,8 @@
         "precip_total": 0.0,
         "dewpoint": 21.1,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -233,7 +240,8 @@
         "precip_total": 0.0,
         "dewpoint": 20.4,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -259,7 +267,8 @@
         "precip_total": 0.0,
         "dewpoint": 20.1,
         "solar_radiation": null,
-        "uv": null
+        "uv": null,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -285,7 +294,8 @@
         "precip_total": 0.0,
         "dewpoint": 20.8,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     },
     {
@@ -311,7 +321,8 @@
         "precip_total": 0.0,
         "dewpoint": 21.5,
         "solar_radiation": 0.0,
-        "uv": 0.0
+        "uv": 0.0,
+        "archived_at": "2026-09-08T00:11:15.219838"
       }
     }
   ]
