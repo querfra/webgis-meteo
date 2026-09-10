@@ -53,15 +53,26 @@ ax.imshow(GRID_PRECIP, extent=extent, origin='lower', cmap='Blues', alpha=0.6, v
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura (usa la stessa griglia ed extent di precipitazioni)
+# 4. Generazione Raster Temperatura (con vmin e vmax dinamici)
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     GRID_TEMP = griddata((lons[valid_temp_mask], lats[valid_temp_mask]), temp_vals[valid_temp_mask], (GRID_LON, GRID_LAT), method='linear', fill_value=np.nan)
+    
+    # Calcolo dinamico dei limiti basato sui dati reali con un margine di 1°C
+    t_min = np.nanmin(temp_vals[valid_temp_mask]) - 1.0
+    t_max = np.nanmax(temp_vals[valid_temp_mask]) + 1.0
+    
+    # Evitiamo intervalli nulli se tutte le stazioni segnano la stessa identica temperatura
+    if t_min == t_max:
+        t_min -= 1.0
+        t_max += 1.0
+
     fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
     ax.set_axis_off()
-    ax.imshow(GRID_TEMP, extent=extent, origin='lower', cmap='RdBu_r', alpha=0.6, vmin=10, vmax=35)
+    ax.imshow(GRID_TEMP, extent=extent, origin='lower', cmap='RdBu_r', alpha=0.6, vmin=t_min, vmax=t_max)
     plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
     plt.close()
+
 
 # 5. Salvataggio dei confini geografici (bounds) comuni per Leaflet
 bounds = {
