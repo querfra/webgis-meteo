@@ -93,8 +93,12 @@ with open("data/meteo_latest.json", "w", encoding="utf-8") as f:
 
 # --- 2. GENERAZIONE SUMMARY GIORNALIERO (Max, Min e Ultima Pioggia) ---
 if features:
-    summary_dir = "data/summary"
+    # Usa il percorso assoluto dello script per evitare problemi di directory
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    summary_dir = os.path.join(base_dir, "data", "summary")
+    
     os.makedirs(summary_dir, exist_ok=True)
+    print(f"Cartella summary verificata/creata in: {summary_dir}")
     
     oggi_str = datetime.now().strftime("%Y-%m-%d")
     summary_file = os.path.join(summary_dir, f"summary_{oggi_str}.json")
@@ -162,8 +166,7 @@ if features:
     
     with open(summary_file, "w", encoding="utf-8") as f:
         json.dump(summary_data, f, ensure_ascii=False, indent=2)
-    print("File summary giornaliero aggiornato con successo.")
-
+    print(f"File summary salvato correttamente in: {summary_file}")
 
 # --- 3. GESTIONE ARCHIVIO STORICO GREZZO (OGNI 9 MINUTI) ---
 if features:
