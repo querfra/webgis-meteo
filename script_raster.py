@@ -37,7 +37,7 @@ lats = np.array(lats)
 precip_vals = np.array(precip_vals)
 temp_vals = np.array(temp_vals)
 
-# 2. Calcolo UNICO di griglia ed extent per allineare perfettamente i layers
+# 2. Calcolo UNICO di griglia ed extent per allineare perfettamente i layer
 data_lon_min = lons.min() - 0.05
 data_lon_max = lons.max() + 0.05
 data_lat_min = lats.min() - 0.05
@@ -59,7 +59,7 @@ ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura (Metodo RBF - Limiti fissi da -5 a 45)
+# 4. Generazione Raster Temperatura (Metodo RBF - Limiti fissi da -5 a 45 con cmap standard)
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     rbf = Rbf(
@@ -73,8 +73,7 @@ if np.sum(valid_temp_mask) >= 3:
 
     fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
     ax.set_axis_off()
-    # Impostiamo vmin=-5 e vmax=45 come richiesto
-    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap=custom_cmap, alpha=0.6, vmin=-5, vmax=45)
+    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='RdBu_r', alpha=0.6, vmin=-5, vmax=45)
     plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
     plt.close()
 
@@ -85,9 +84,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster allineati con interpolazione mista (Lineare per precipitazioni, RBF per temperatura)."
+    "note": "Raster allineati con RBF e scala termica fissa da -5 a 45."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Raster di precipitazioni e temperatura generati con successo.")
+print("Raster generati con successo (temperatura bloccata tra -5 e 45).")
