@@ -134,12 +134,14 @@
             const layerUmidita = L.layerGroup();
             const layerPrecipitazioni = L.layerGroup();
             const layerRasterPrecipitazioni = L.layerGroup();
+            const layerRasterTemperatura = L.layerGroup();
 
             const overlayMaps = {
                 "🌡️ Temperatura & Vento": layerTempVento,
                 "💧 Umidità": layerUmidita,
                 "🌧️ Precipitazioni (Puntuali)": layerPrecipitazioni,
-                "🗺️ Precipitazioni (Raster)": layerRasterPrecipitazioni
+                "🗺️ Precipitazioni (Raster)": layerRasterPrecipitazioni,
+                "🗺️ Temperatura (Raster)": layerRasterTemperatura
             };
             L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
@@ -225,18 +227,25 @@
                     });
             }
 
-            function loadRasterOverlay() {
+            function loadRasterOverlays() {
                 fetch('data/raster/raster_bounds.json?t=' + new Date().getTime())
                     .then(response => response.json())
                     .then(boundsData => {
-                        layerRasterPrecipitazioni.clearLayers();
-                        const imageUrl = 'data/raster/precip_raster.png?t=' + new Date().getTime();
                         const imageBounds = boundsData.bounds;
                         
-                        const rasterOverlay = L.imageOverlay(imageUrl, imageBounds, { opacity: 0.65 });
-                        layerRasterPrecipitazioni.addLayer(rasterOverlay);
+                        // Raster Precipitazioni
+                        layerRasterPrecipitazioni.clearLayers();
+                        const precipUrl = 'data/raster/precip_raster.png?t=' + new Date().getTime();
+                        const precipOverlay = L.imageOverlay(precipUrl, imageBounds, { opacity: 0.65 });
+                        layerRasterPrecipitazioni.addLayer(precipOverlay);
+
+                        // Raster Temperatura
+                        layerRasterTemperatura.clearLayers();
+                        const tempUrl = 'data/raster/temp_raster.png?t=' + new Date().getTime();
+                        const tempOverlay = L.imageOverlay(tempUrl, imageBounds, { opacity: 0.65 });
+                        layerRasterTemperatura.addLayer(tempOverlay);
                     })
-                    .catch(err => console.log("Raster non ancora disponibile."));
+                    .catch(err => console.log("Raster non ancora disponibili."));
             }
 
             function aggiungiPopup(marker, props) {
@@ -259,11 +268,11 @@
                 `);
             }
 
-            // Caricamento iniziale dei dati correnti
+            // Caricamento iniziale
             loadMeteoData('data/meteo_latest.json', false);
-            loadRasterOverlay();
+            loadRasterOverlays();
 
-            // Gestione evento cambio data nel calendario
+            // Gestione calendario
             document.getElementById('archive-date').addEventListener('change', (e) => {
                 const selectedDate = e.target.value;
                 if (selectedDate) {
@@ -272,12 +281,12 @@
                 }
             });
 
-            // Aggiornamento periodico in tempo reale (solo se non si sta consultando l'archivio)
+            // Aggiornamento periodico in tempo reale
             setInterval(() => {
                 const dateVal = document.getElementById('archive-date').value;
                 if (!dateVal) {
                     loadMeteoData('data/meteo_latest.json', false);
-                    loadRasterOverlay();
+                    loadRasterOverlays();
                 }
             }, 60000);
         }
