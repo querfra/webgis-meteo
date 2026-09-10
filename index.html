@@ -123,11 +123,13 @@
             const layerTempVento = L.layerGroup().addTo(map);
             const layerUmidita = L.layerGroup();
             const layerPrecipitazioni = L.layerGroup();
+            const layerRasterPrecipitazioni = L.layerGroup();
 
             const overlayMaps = {
                 "🌡️ Temperatura & Vento": layerTempVento,
                 "💧 Umidità": layerUmidita,
-                "🌧️ Precipitazioni": layerPrecipitazioni
+                "🌧️ Precipitazioni (Puntuali)": layerPrecipitazioni,
+                "🗺️ Precipitazioni (Raster)": layerRasterPrecipitazioni
             };
             L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
@@ -185,7 +187,7 @@
                             aggiungiPopup(markerHum, props);
                             layerUmidita.addLayer(markerHum);
 
-                            // 3. Marker Precipitazioni
+                            // 3. Marker Precipitazioni Puntuali
                             const iconPrecipitazioni = L.divIcon({
                                 className: 'meteo-marker',
                                 html: `<div class="precip-circle">${precipVal}</div>`,
@@ -200,6 +202,20 @@
                         });
                     })
                     .catch(err => console.error("Errore caricamento dati:", err));
+            }
+
+            function loadRasterOverlay() {
+                fetch('data/raster/raster_bounds.json?t=' + new Date().getTime())
+                    .then(response => response.json())
+                    .then(boundsData => {
+                        layerRasterPrecipitazioni.clearLayers();
+                        const imageUrl = 'data/raster/precip_raster.png?t=' + new Date().getTime();
+                        const imageBounds = boundsData.bounds;
+                        
+                        const rasterOverlay = L.imageOverlay(imageUrl, imageBounds, { opacity: 0.65 });
+                        layerRasterPrecipitazioni.addLayer(rasterOverlay);
+                    })
+                    .catch(err => console.log("Raster non ancora disponibile."));
             }
 
             function aggiungiPopup(marker, props) {
@@ -223,7 +239,11 @@
             }
 
             loadMeteoData();
+            loadRasterOverlay();
+            
+            // Aggiornamento periodico ogni 60 secondi per i punti, ogni 10 minuti per il raster
             setInterval(loadMeteoData, 60000);
+            setInterval(loadRasterOverlay, 600000);
         }
 
         window.onload = inizializzaMappa;
