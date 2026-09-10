@@ -128,40 +128,48 @@
                         layerTempVento.clearLayers();
                         layerUmidita.clearLayers();
 
-                        data.features.forEach(feature => {
-                            const props = feature.properties;
-                            const coords = feature.geometry.coordinates;
-                            const latlng = [coords[1], coords[0]];
+                      data.features.forEach(feature => {
+    const props = feature.properties;
+    const coords = feature.geometry.coordinates;
+    const latlng = [coords[1], coords[0]];
 
-                            // --- 1. CREAZIONE MARKER TEMPERATURA & VENTO ---
-                            const tempVal = props.temp !== undefined ? props.temp.toFixed(1) : 'N/D';
-                            const tempColor = props.temp !== undefined ? getTempColor(props.temp) : '#555';
-                            const windDir = props.wind_dir || 0;
+    // --- CONTROLLI DI SICUREZZA PER EVITARE CRASH ---
+    const tempValNum = (props.temp !== null && props.temp !== undefined) ? Number(props.temp) : null;
+    const tempVal = tempValNum !== null ? tempValNum.toFixed(1) : 'N/D';
+    const tempColor = tempValNum !== null ? getTempColor(tempValNum) : '#555';
+    
+    const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
+    const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
 
-                            const iconTempVento = L.divIcon({
-                                className: 'meteo-marker',
-                                html: `
-                                    <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
-                                    <div class="temp-circle" style="background-color: ${tempColor};">${tempVal}</div>
-                                `,
-                                iconSize: [32, 32],
-                                iconAnchor: [16, 18],
-                                popupAnchor: [0, -18]
-                            });
+    // --- 1. CREAZIONE MARKER TEMPERATURA & VENTO ---
+    const iconTempVento = L.divIcon({
+        className: 'meteo-marker',
+        html: `
+            <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
+            <div class="temp-circle" style="background-color: ${tempColor};">${tempVal}</div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 18],
+        popupAnchor: [0, -18]
+    });
 
-                            const markerTV = L.marker(latlng, { icon: iconTempVento });
-                            aggiungiPopup(markerTV, props);
-                            layerTempVento.addLayer(markerTV);
+    const markerTV = L.marker(latlng, { icon: iconTempVento });
+    aggiungiPopup(markerTV, props);
+    layerTempVento.addLayer(markerTV);
 
-                            // --- 2. CREAZIONE MARKER UMIDITÀ ---
-                            const humVal = props.humidity !== undefined ? props.humidity + '%' : 'N/D';
-                            const iconUmidita = L.divIcon({
-                                className: 'meteo-marker',
-                                html: `<div class="humidity-circle">${humVal}</div>`,
-                                iconSize: [30, 30],
-                                iconAnchor: [15, 15],
-                                popupAnchor: [0, -15]
-                            });
+    // --- 2. CREAZIONE MARKER UMIDITÀ ---
+    const iconUmidita = L.divIcon({
+        className: 'meteo-marker',
+        html: `<div class="humidity-circle">${humVal}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -15]
+    });
+
+    const markerHum = L.marker(latlng, { icon: iconUmidita });
+    aggiungiPopup(markerHum, props);
+    layerUmidita.addLayer(markerHum);
+});
 
                             const markerHum = L.marker(latlng, { icon: iconUmidita });
                             aggiungiPopup(markerHum, props);
