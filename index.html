@@ -60,6 +60,21 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
+        .precip-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #1d4ed8;
+            background-color: rgba(29, 78, 216, 0.85);
+            color: #fff;
+            font-weight: bold;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
         .info-box { 
             position: absolute; 
             top: 10px; 
@@ -107,10 +122,12 @@
 
             const layerTempVento = L.layerGroup().addTo(map);
             const layerUmidita = L.layerGroup();
+            const layerPrecipitazioni = L.layerGroup();
 
             const overlayMaps = {
                 "🌡️ Temperatura & Vento": layerTempVento,
-                "💧 Umidità": layerUmidita
+                "💧 Umidità": layerUmidita,
+                "🌧️ Precipitazioni": layerPrecipitazioni
             };
             L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
@@ -122,6 +139,7 @@
 
                         layerTempVento.clearLayers();
                         layerUmidita.clearLayers();
+                        layerPrecipitazioni.clearLayers();
 
                         data.features.forEach(feature => {
                             const props = feature.properties;
@@ -134,6 +152,9 @@
                             
                             const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
                             const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
+                            
+                            const precipValNum = (props.precip_rate !== null && props.precip_rate !== undefined) ? Number(props.precip_rate) : 0;
+                            const precipVal = precipValNum > 0 ? precipValNum.toFixed(1) + 'mm' : '0mm';
 
                             // 1. Marker Temperatura & Vento
                             const iconTempVento = L.divIcon({
@@ -163,6 +184,19 @@
                             const markerHum = L.marker(latlng, { icon: iconUmidita });
                             aggiungiPopup(markerHum, props);
                             layerUmidita.addLayer(markerHum);
+
+                            // 3. Marker Precipitazioni
+                            const iconPrecipitazioni = L.divIcon({
+                                className: 'meteo-marker',
+                                html: `<div class="precip-circle">${precipVal}</div>`,
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 15],
+                                popupAnchor: [0, -15]
+                            });
+
+                            const markerPrecip = L.marker(latlng, { icon: iconPrecipitazioni });
+                            aggiungiPopup(markerPrecip, props);
+                            layerPrecipitazioni.addLayer(markerPrecip);
                         });
                     })
                     .catch(err => console.error("Errore caricamento dati:", err));
