@@ -2,7 +2,7 @@ name: Genera Raster Meteo
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Esegue ogni ora
+    - cron: '*/10 * * * *'  # Esegue ogni 10 minuti
   workflow_dispatch:
 
 jobs:
@@ -28,4 +28,4 @@ jobs:
           git config --global user.name "GitHub Actions Raster Bot"
           git config --global user.email "actions@github.com"
           git add data/raster/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Aggiornamento raster precipitazioni orario" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Aggiornamento automatico raster meteo" && git push)
