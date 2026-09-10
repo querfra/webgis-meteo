@@ -63,7 +63,7 @@ if np.sum(valid_temp_mask) >= 3:
     plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
     plt.close()
 
-# 5. Salvataggio dei confini geografici (bounds) per Leaflet
+# 5. Salvataggio dei confini geografici (bounds) comuni per Leaflet
 bounds = {
     "bounds": [
         [lats.min() - 0.05, lons.min() - 0.05],
