@@ -59,24 +59,26 @@ ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura (Metodo RBF con kernel Gaussiano e smoothing)
+# 4. Generazione Raster Temperatura (Metodo RBF con Thin Plate Spline e scala 'nipy_spectral')
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     rbf = Rbf(
         lons[valid_temp_mask], 
         lats[valid_temp_mask], 
         temp_vals[valid_temp_mask], 
-        function='gaussian',  # Passiamo a 'gaussian' o 'inverse' per evitare gli anelli netti
-        smooth=1.5            # Aggiungiamo un leggero smoothing per smussare i gradienti
+        function='thin_plate', 
+        smooth=0.0
     )
     GRID_TEMP = rbf(GRID_LON, GRID_LAT)
 
     fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
     ax.set_axis_off()
-    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='RdBu_r', alpha=0.6, vmin=-5, vmax=45)
+
+    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
+    
     plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
     plt.close()
-
+    
 # 5. Salvataggio dei confini comuni per Leaflet
 bounds = {
     "bounds": [
