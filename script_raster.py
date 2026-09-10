@@ -59,15 +59,15 @@ ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura (Metodo RBF - Limiti fissi da -5 a 45 con cmap standard)
+# 4. Generazione Raster Temperatura (Metodo RBF con kernel Gaussiano e smoothing)
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     rbf = Rbf(
         lons[valid_temp_mask], 
         lats[valid_temp_mask], 
         temp_vals[valid_temp_mask], 
-        function='multiquadric', 
-        smooth=0.0
+        function='gaussian',  # Passiamo a 'gaussian' o 'inverse' per evitare gli anelli netti
+        smooth=1.5            # Aggiungiamo un leggero smoothing per smussare i gradienti
     )
     GRID_TEMP = rbf(GRID_LON, GRID_LAT)
 
