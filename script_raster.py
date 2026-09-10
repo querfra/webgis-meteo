@@ -53,7 +53,7 @@ ax.imshow(GRID_PRECIP, extent=extent, origin='lower', cmap='Blues', alpha=0.6, v
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura
+# 4. Generazione Raster Temperatura (usa la stessa griglia ed extent di precipitazioni)
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     GRID_TEMP = griddata((lons[valid_temp_mask], lats[valid_temp_mask]), temp_vals[valid_temp_mask], (GRID_LON, GRID_LAT), method='linear', fill_value=np.nan)
@@ -74,4 +74,4 @@ bounds = {
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Raster di precipitazioni e temperatura generati con successo.")
+print("Raster di precipitazioni e temperatura generati con successo con limiti identici.")
