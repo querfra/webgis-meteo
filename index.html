@@ -300,7 +300,7 @@
             document.getElementById('archive-date').addEventListener('change', (e) => {
                 const selectedDate = e.target.value;
                 if (selectedDate) {
-                    const archiveUrl = `archive/meteo_archive_${selectedDate}.json`;
+                    const archiveUrl = `data/summary/summary_${selectedDate}.json`;
                     loadMeteoData(archiveUrl, true);
                 }
             });
