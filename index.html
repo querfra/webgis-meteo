@@ -12,7 +12,6 @@
         body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
         #map { width: 100%; height: 100vh; }
 
-        /* Stile Marker Temperatura & Vento */
         .meteo-marker {
             position: absolute;
             width: 32px;
@@ -46,7 +45,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* Stile Marker Umidità */
         .humidity-circle {
             width: 30px;
             height: 30px;
@@ -107,11 +105,9 @@
                 return "#581c87";
             }
 
-            // Inizializziamo i Layer Groups di Leaflet
-            const layerTempVento = L.layerGroup().addTo(map); // Di default attivo
+            const layerTempVento = L.layerGroup().addTo(map);
             const layerUmidita = L.layerGroup();
 
-            // Creazione del widget di controllo dei layer in alto a destra
             const overlayMaps = {
                 "🌡️ Temperatura & Vento": layerTempVento,
                 "💧 Umidità": layerUmidita
@@ -124,52 +120,45 @@
                     .then(data => {
                         document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
 
-                        // Pulisci i layer esistenti prima di ricaricare i nuovi dati
                         layerTempVento.clearLayers();
                         layerUmidita.clearLayers();
 
-                      data.features.forEach(feature => {
-    const props = feature.properties;
-    const coords = feature.geometry.coordinates;
-    const latlng = [coords[1], coords[0]];
+                        data.features.forEach(feature => {
+                            const props = feature.properties;
+                            const coords = feature.geometry.coordinates;
+                            const latlng = [coords[1], coords[0]];
 
-    // --- CONTROLLI DI SICUREZZA PER EVITARE CRASH ---
-    const tempValNum = (props.temp !== null && props.temp !== undefined) ? Number(props.temp) : null;
-    const tempVal = tempValNum !== null ? tempValNum.toFixed(1) : 'N/D';
-    const tempColor = tempValNum !== null ? getTempColor(tempValNum) : '#555';
-    
-    const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
-    const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
+                            const tempValNum = (props.temp !== null && props.temp !== undefined) ? Number(props.temp) : null;
+                            const tempVal = tempValNum !== null ? tempValNum.toFixed(1) : 'N/D';
+                            const tempColor = tempValNum !== null ? getTempColor(tempValNum) : '#555';
+                            
+                            const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
+                            const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
 
-    // --- 1. CREAZIONE MARKER TEMPERATURA & VENTO ---
-    const iconTempVento = L.divIcon({
-        className: 'meteo-marker',
-        html: `
-            <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
-            <div class="temp-circle" style="background-color: ${tempColor};">${tempVal}</div>
-        `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 18],
-        popupAnchor: [0, -18]
-    });
+                            // 1. Marker Temperatura & Vento
+                            const iconTempVento = L.divIcon({
+                                className: 'meteo-marker',
+                                html: `
+                                    <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
+                                    <div class="temp-circle" style="background-color: ${tempColor};">${tempVal}</div>
+                                `,
+                                iconSize: [32, 32],
+                                iconAnchor: [16, 18],
+                                popupAnchor: [0, -18]
+                            });
 
-    const markerTV = L.marker(latlng, { icon: iconTempVento });
-    aggiungiPopup(markerTV, props);
-    layerTempVento.addLayer(markerTV);
+                            const markerTV = L.marker(latlng, { icon: iconTempVento });
+                            aggiungiPopup(markerTV, props);
+                            layerTempVento.addLayer(markerTV);
 
-    // --- 2. CREAZIONE MARKER UMIDITÀ ---
-    const iconUmidita = L.divIcon({
-        className: 'meteo-marker',
-        html: `<div class="humidity-circle">${humVal}</div>`,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
-        popupAnchor: [0, -15]
-    });
-
-    const markerHum = L.marker(latlng, { icon: iconUmidita });
-    aggiungiPopup(markerHum, props);
-    layerUmidita.addLayer(markerHum);
-});
+                            // 2. Marker Umidità
+                            const iconUmidita = L.divIcon({
+                                className: 'meteo-marker',
+                                html: `<div class="humidity-circle">${humVal}</div>`,
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 15],
+                                popupAnchor: [0, -15]
+                            });
 
                             const markerHum = L.marker(latlng, { icon: iconUmidita });
                             aggiungiPopup(markerHum, props);
@@ -185,16 +174,16 @@
                         <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood || 'N/D'})<br>
                         <strong>Ora:</strong> ${props.time || 'N/D'}<br>
                         <hr style="margin: 5px 0; border: none; border-top: 1px solid #cbd5e1;">
-                        <strong>Temperatura:</strong> ${props.temp !== undefined ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>
-                        <strong>Punto di Rugiada:</strong> ${props.dewpoint !== undefined ? props.dewpoint + ' °C' : 'N/D'}<br>
-                        <strong>Umidità:</strong> ${props.humidity !== undefined ? props.humidity + '%' : 'N/D'}<br>
-                        <strong>Pressione:</strong> ${props.pressure !== undefined ? props.pressure + ' hPa' : 'N/D'}<br>
-                        <strong>Vento:</strong> ${props.wind_speed !== undefined ? props.wind_speed + ' km/h' : 'N/D'} (Dir: ${props.wind_dir !== undefined ? props.wind_dir + '°' : 'N/D'})<br>
-                        <strong>Raffica:</strong> ${props.wind_gust !== undefined ? props.wind_gust + ' km/h' : 'N/D'}<br>
-                        <strong>Pioggia (Rate):</strong> ${props.precip_rate !== undefined ? props.precip_rate + ' mm/h' : 'N/D'}<br>
-                        <strong>Pioggia (Totale):</strong> ${props.precip_total !== undefined ? props.precip_total + ' mm' : 'N/D'}<br>
-                        <strong>Radiazione Solare:</strong> ${props.solar_radiation !== undefined ? props.solar_radiation + ' W/m²' : 'N/D'}<br>
-                        <strong>Indice UV:</strong> ${props.uv !== undefined ? props.uv : 'N/D'}
+                        <strong>Temperatura:</strong> ${props.temp !== undefined && props.temp !== null ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>
+                        <strong>Punto di Rugiada:</strong> ${props.dewpoint !== undefined && props.dewpoint !== null ? props.dewpoint + ' °C' : 'N/D'}<br>
+                        <strong>Umidità:</strong> ${props.humidity !== undefined && props.humidity !== null ? props.humidity + '%' : 'N/D'}<br>
+                        <strong>Pressione:</strong> ${props.pressure !== undefined && props.pressure !== null ? props.pressure + ' hPa' : 'N/D'}<br>
+                        <strong>Vento:</strong> ${props.wind_speed !== undefined && props.wind_speed !== null ? props.wind_speed + ' km/h' : 'N/D'} (Dir: ${props.wind_dir !== undefined && props.wind_dir !== null ? props.wind_dir + '°' : 'N/D'})<br>
+                        <strong>Raffica:</strong> ${props.wind_gust !== undefined && props.wind_gust !== null ? props.wind_gust + ' km/h' : 'N/D'}<br>
+                        <strong>Pioggia (Rate):</strong> ${props.precip_rate !== undefined && props.precip_rate !== null ? props.precip_rate + ' mm/h' : 'N/D'}<br>
+                        <strong>Pioggia (Totale):</strong> ${props.precip_total !== undefined && props.precip_total !== null ? props.precip_total + ' mm' : 'N/D'}<br>
+                        <strong>Radiazione Solare:</strong> ${props.solar_radiation !== undefined && props.solar_radiation !== null ? props.solar_radiation + ' W/m²' : 'N/D'}<br>
+                        <strong>Indice UV:</strong> ${props.uv !== undefined && props.uv !== null ? props.uv : 'N/D'}
                     </div>
                 `);
             }
