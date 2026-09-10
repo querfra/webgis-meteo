@@ -75,11 +75,12 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
+        /* Spostato in alto a sinistra per evitare sovrapposizioni con i layer */
         .info-box { 
             position: absolute; 
             top: 10px; 
-            right: 10px; 
-            background: rgba(255, 255, 255, 0.9); 
+            left: 60px; 
+            background: rgba(255, 255, 255, 0.95); 
             padding: 10px 15px; 
             border-radius: 8px; 
             box-shadow: 0 0 10px rgba(0,0,0,0.2); 
@@ -95,7 +96,7 @@
             font-size: 12px;
         }
 
-        /* Fix per il menu dei layer Leaflet */
+        /* Fix per il menu dei layer Leaflet in alto a destra */
         .leaflet-control-layers {
             border-radius: 8px !important;
             box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
