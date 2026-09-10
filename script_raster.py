@@ -59,7 +59,7 @@ ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 4. Generazione Raster Temperatura (Metodo RBF - Superficie liscia)
+# 4. Generazione Raster Temperatura (Metodo RBF - Limiti fissi da -5 a 45)
 valid_temp_mask = ~np.isnan(temp_vals)
 if np.sum(valid_temp_mask) >= 3:
     rbf = Rbf(
@@ -70,17 +70,11 @@ if np.sum(valid_temp_mask) >= 3:
         smooth=0.0
     )
     GRID_TEMP = rbf(GRID_LON, GRID_LAT)
-    
-    # Calcolo dinamico dei limiti della temperatura
-    t_min = np.nanmin(temp_vals[valid_temp_mask]) - 1.0
-    t_max = np.nanmax(temp_vals[valid_temp_mask]) + 1.0
-    if t_min == t_max: 
-        t_min -= 1.0
-        t_max += 1.0
 
     fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
     ax.set_axis_off()
-    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='RdBu_r', alpha=0.6, vmin=t_min, vmax=t_max)
+    # Impostiamo vmin=-5 e vmax=45 come richiesto
+    ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap=custom_cmap, alpha=0.6, vmin=-5, vmax=45)
     plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
     plt.close()
 
