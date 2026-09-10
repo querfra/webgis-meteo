@@ -132,3 +132,79 @@ if features:
         print("Saltato l'aggiornamento dell'archivio (intervallo di 10 minuti non ancora raggiunto).")
 else:
     print("Nessun dato valido scaricato in questa esecuzione.")
+
+# --- GENERAZIONE SUMMARY GIORNALIERO PER IL WEBGIS AGGIUNTO ADESSO  ---
+if features:
+    summary_dir = "data/summary"
+    os.makedirs(summary_dir, exist_ok=True)
+    
+    oggi_str = datetime.now().strftime("%Y-%m-%d")
+    summary_file = os.path.join(summary_dir, f"summary_{oggi_str}.json")
+    
+    # 1. Carica il summary esistente di oggi (se esiste già) per mantenere max/min accumulate
+    existing_stations = {}
+    if os.path.exists(summary_file):
+        try:
+            with open(summary_file, "r", encoding="utf-8") as f:
+                old_summary = json.load(f)
+                for feat in old_summary.get("features", []):
+                    sid = feat.get("properties", {}).get("station_id")
+                    if sid:
+                        existing_stations[sid] = feat["properties"]
+        except Exception as e:
+            print(f"Errore lettura summary esistente: {e}")
+            
+    summary_features = []
+    
+    # 2. Elabora le stazioni appena scaricate confrontandole con le massime/minime del giorno
+    for feature in features:
+        props = feature.get("properties", {})
+        station_id = props.get("station_id")
+        if not station_id:
+            continue
+            
+        current_temp = props.get("temp")
+        current_precip = props.get("precip_total") if props.get("precip_total") is not None else props.get("precip_rate")
+        
+        prev_props = existing_stations.get(station_id, {})
+        
+        # Calcolo Temperatura Max
+        t_max = prev_props.get("temp_max")
+        if current_temp is not None:
+            if t_max is None or float(current_temp) > float(t_max):
+                t_max = float(current_temp)
+                
+        # Calcolo Temperatura Min
+        t_min = prev_props.get("temp_min")
+        if current_temp is not None:
+            if t_min is None or float(current_temp) < float(t_min):
+                t_min = float(current_temp)
+                
+        # Ultimo dato utile di pioggia
+        last_precip = current_precip if current_precip is not None else prev_props.get("precip_final", 0.0)
+        
+        # Crea la feature pulita per il WebGIS
+        summary_feature = {
+            "type": "Feature",
+            "geometry": feature.get("geometry"),
+            "properties": {
+                "station_id": station_id,
+                "neighborhood": props.get("neighborhood"),
+                "temp_max": t_max,
+                "temp_min": t_min,
+                "humidity": props.get("humidity"),
+                "precip_final": last_precip,
+                "archived_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        }
+        summary_features.append(summary_feature)
+        
+    summary_data = {
+        "type": "FeatureCollection",
+        "date": oggi_str,
+        "features": summary_features
+    }
+    
+    with open(summary_file, "w", encoding="utf-8") as f:
+        json.dump(summary_data, f, ensure_ascii=False, indent=2)
+    print("File summary giornaliero aggiornato con successo.")
