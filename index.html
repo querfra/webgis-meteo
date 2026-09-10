@@ -86,13 +86,23 @@
             z-index: 1000; 
             font-size: 12px; 
         }
+        
+        .info-box input[type="date"] {
+            margin-top: 5px;
+            padding: 3px 5px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
     <div id="info" class="info-box">
         <strong>WebGIS Meteo</strong><br>
-        <span id="last-update">Caricamento dati...</span>
+        <span id="last-update">Caricamento dati...</span><br>
+        <label for="archive-date" style="font-size: 11px; color: #475569; display:block; margin-top:5px;">Seleziona Data:</label>
+        <input type="date" id="archive-date">
     </div>
 
     <div id="map"></div>
@@ -133,17 +143,25 @@
             };
             L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
-            function loadMeteoData() {
-                fetch('data/meteo_latest.json?t=' + new Date().getTime())
-                    .then(response => response.json())
+            function loadMeteoData(urlFile, isArchive = false) {
+                fetch(urlFile + '?t=' + new Date().getTime())
+                    .then(response => {
+                        if (!response.ok) throw new Error("File non trovato");
+                        return response.json();
+                    })
                     .then(data => {
-                        document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
+                        if (isArchive) {
+                            document.getElementById('last-update').innerText = 'Archivio: ' + (document.getElementById('archive-date').value || 'Selezionato');
+                        } else {
+                            document.getElementById('last-update').innerText = 'Ultimo agg: ' + (data.updated_at || 'N/D');
+                        }
 
                         layerTempVento.clearLayers();
                         layerUmidita.clearLayers();
                         layerPrecipitazioni.clearLayers();
 
-                        data.features.forEach(feature => {
+                        const features = data.features || [];
+                        features.forEach(feature => {
                             const props = feature.properties;
                             const coords = feature.geometry.coordinates;
                             const latlng = [coords[1], coords[0]];
@@ -201,7 +219,10 @@
                             layerPrecipitazioni.addLayer(markerPrecip);
                         });
                     })
-                    .catch(err => console.error("Errore caricamento dati:", err));
+                    .catch(err => {
+                        console.error("Errore caricamento dati:", err);
+                        alert("Nessun dato d'archivio disponibile per la data selezionata.");
+                    });
             }
 
             function loadRasterOverlay() {
@@ -222,7 +243,7 @@
                 marker.bindPopup(`
                     <div style="font-size: 13px; line-height: 1.4;">
                         <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood || 'N/D'})<br>
-                        <strong>Ora:</strong> ${props.time || 'N/D'}<br>
+                        <strong>Ora:</strong> ${props.time || props.archived_at || 'N/D'}<br>
                         <hr style="margin: 5px 0; border: none; border-top: 1px solid #cbd5e1;">
                         <strong>Temperatura:</strong> ${props.temp !== undefined && props.temp !== null ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>
                         <strong>Punto di Rugiada:</strong> ${props.dewpoint !== undefined && props.dewpoint !== null ? props.dewpoint + ' °C' : 'N/D'}<br>
@@ -238,12 +259,27 @@
                 `);
             }
 
-            loadMeteoData();
+            // Caricamento iniziale dei dati correnti
+            loadMeteoData('data/meteo_latest.json', false);
             loadRasterOverlay();
-            
-            // Aggiornamento periodico ogni 60 secondi per i punti, ogni 10 minuti per il raster
-            setInterval(loadMeteoData, 60000);
-            setInterval(loadRasterOverlay, 600000);
+
+            // Gestione evento cambio data nel calendario
+            document.getElementById('archive-date').addEventListener('change', (e) => {
+                const selectedDate = e.target.value;
+                if (selectedDate) {
+                    const archiveUrl = `archive/meteo_archive_${selectedDate}.json`;
+                    loadMeteoData(archiveUrl, true);
+                }
+            });
+
+            // Aggiornamento periodico in tempo reale (solo se non si sta consultando l'archivio)
+            setInterval(() => {
+                const dateVal = document.getElementById('archive-date').value;
+                if (!dateVal) {
+                    loadMeteoData('data/meteo_latest.json', false);
+                    loadRasterOverlay();
+                }
+            }, 60000);
         }
 
         window.onload = inizializzaMappa;
