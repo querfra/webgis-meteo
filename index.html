@@ -37,10 +37,12 @@
             border: 2px solid #000;
             color: #fff;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 9px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            line-height: 1.1;
             z-index: 2;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
@@ -75,7 +77,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* Spostato in alto a sinistra per evitare sovrapposizioni con i layer */
         .info-box { 
             position: absolute; 
             top: 10px; 
@@ -96,7 +97,6 @@
             font-size: 12px;
         }
 
-        /* Fix per il menu dei layer Leaflet in alto a destra */
         .leaflet-control-layers {
             border-radius: 8px !important;
             box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
@@ -181,14 +181,26 @@
                             const coords = feature.geometry.coordinates;
                             const latlng = [coords[1], coords[0]];
 
-                            const tempValNum = (props.temp !== null && props.temp !== undefined) ? Number(props.temp) : null;
-                            const tempVal = tempValNum !== null ? tempValNum.toFixed(1) : 'N/D';
-                            const tempColor = tempValNum !== null ? getTempColor(tempValNum) : '#555';
+                            let tempHtml = '';
+                            let tempColor = '#555';
+
+                            if (isArchive) {
+                                const tMax = (props.temp_max !== null && props.temp_max !== undefined) ? Number(props.temp_max).toFixed(1) : 'N/D';
+                                const tMin = (props.temp_min !== null && props.temp_min !== undefined) ? Number(props.temp_min).toFixed(1) : 'N/D';
+                                tempColor = props.temp_max !== undefined ? getTempColor(Number(props.temp_max)) : '#555';
+                                tempHtml = `<span style="color:#ffeb3b;">${tMax}</span><span style="color:#b3e5fc;">${tMin}</span>`;
+                            } else {
+                                const tempValNum = (props.temp !== null && props.temp !== undefined) ? Number(props.temp) : null;
+                                const tempVal = tempValNum !== null ? tempValNum.toFixed(1) : 'N/D';
+                                tempColor = tempValNum !== null ? getTempColor(tempValNum) : '#555';
+                                tempHtml = `<span>${tempVal}</span>`;
+                            }
                             
                             const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
                             const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
                             
-                            const precipValNum = (props.precip_rate !== null && props.precip_rate !== undefined) ? Number(props.precip_rate) : 0;
+                            const precipValRaw = isArchive ? (props.precip_final !== undefined ? props.precip_final : props.precip_rate) : props.precip_rate;
+                            const precipValNum = (precipValRaw !== null && precipValRaw !== undefined) ? Number(precipValRaw) : 0;
                             const precipVal = precipValNum > 0 ? precipValNum.toFixed(1) + 'mm' : '0mm';
 
                             // 1. Marker Temperatura & Vento
@@ -196,7 +208,7 @@
                                 className: 'meteo-marker',
                                 html: `
                                     <div class="wind-bar" style="transform: rotate(${windDir}deg);"></div>
-                                    <div class="temp-circle" style="background-color: ${tempColor};">${tempVal}</div>
+                                    <div class="temp-circle" style="background-color: ${tempColor};">${tempHtml}</div>
                                 `,
                                 iconSize: [32, 32],
                                 iconAnchor: [16, 18],
@@ -204,7 +216,7 @@
                             });
 
                             const markerTV = L.marker(latlng, { icon: iconTempVento });
-                            aggiungiPopup(markerTV, props);
+                            aggiungiPopup(markerTV, props, isArchive);
                             layerTempVento.addLayer(markerTV);
 
                             // 2. Marker Umidità
@@ -217,7 +229,7 @@
                             });
 
                             const markerHum = L.marker(latlng, { icon: iconUmidita });
-                            aggiungiPopup(markerHum, props);
+                            aggiungiPopup(markerHum, props, isArchive);
                             layerUmidita.addLayer(markerHum);
 
                             // 3. Marker Precipitazioni Puntuali
@@ -230,7 +242,7 @@
                             });
 
                             const markerPrecip = L.marker(latlng, { icon: iconPrecipitazioni });
-                            aggiungiPopup(markerPrecip, props);
+                            aggiungiPopup(markerPrecip, props, isArchive);
                             layerPrecipitazioni.addLayer(markerPrecip);
                         });
                     })
@@ -246,13 +258,11 @@
                     .then(boundsData => {
                         const imageBounds = boundsData.bounds;
                         
-                        // Raster Precipitazioni
                         layerRasterPrecipitazioni.clearLayers();
                         const precipUrl = 'data/raster/precip_raster.png?t=' + new Date().getTime();
                         const precipOverlay = L.imageOverlay(precipUrl, imageBounds, { opacity: 0.65 });
                         layerRasterPrecipitazioni.addLayer(precipOverlay);
 
-                        // Raster Temperatura
                         layerRasterTemperatura.clearLayers();
                         const tempUrl = 'data/raster/temp_raster.png?t=' + new Date().getTime();
                         const tempOverlay = L.imageOverlay(tempUrl, imageBounds, { opacity: 0.65 });
@@ -261,31 +271,32 @@
                     .catch(err => console.log("Raster non ancora disponibili."));
             }
 
-            function aggiungiPopup(marker, props) {
+            function aggiungiPopup(marker, props, isArchive) {
+                let tempInfo = '';
+                if (isArchive) {
+                    tempInfo = `
+                        <strong>Temperatura Max:</strong> ${props.temp_max !== undefined && props.temp_max !== null ? Number(props.temp_max).toFixed(1) + ' °C' : 'N/D'}<br>
+                        <strong>Temperatura Min:</strong> ${props.temp_min !== undefined && props.temp_min !== null ? Number(props.temp_min).toFixed(1) + ' °C' : 'N/D'}<br>
+                    `;
+                } else {
+                    tempInfo = `<strong>Temperatura:</strong> ${props.temp !== undefined && props.temp !== null ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>`;
+                }
+
                 marker.bindPopup(`
                     <div style="font-size: 13px; line-height: 1.4;">
                         <strong>Stazione:</strong> ${props.station_id} (${props.neighborhood || 'N/D'})<br>
-                        <strong>Ora:</strong> ${props.time || props.archived_at || 'N/D'}<br>
+                        <strong>Data/Ora:</strong> ${props.archived_at || props.time || 'N/D'}<br>
                         <hr style="margin: 5px 0; border: none; border-top: 1px solid #cbd5e1;">
-                        <strong>Temperatura:</strong> ${props.temp !== undefined && props.temp !== null ? props.temp.toFixed(1) + ' °C' : 'N/D'}<br>
-                        <strong>Punto di Rugiada:</strong> ${props.dewpoint !== undefined && props.dewpoint !== null ? props.dewpoint + ' °C' : 'N/D'}<br>
+                        ${tempInfo}
                         <strong>Umidità:</strong> ${props.humidity !== undefined && props.humidity !== null ? props.humidity + '%' : 'N/D'}<br>
-                        <strong>Pressione:</strong> ${props.pressure !== undefined && props.pressure !== null ? props.pressure + ' hPa' : 'N/D'}<br>
-                        <strong>Vento:</strong> ${props.wind_speed !== undefined && props.wind_speed !== null ? props.wind_speed + ' km/h' : 'N/D'} (Dir: ${props.wind_dir !== undefined && props.wind_dir !== null ? props.wind_dir + '°' : 'N/D'})<br>
-                        <strong>Raffica:</strong> ${props.wind_gust !== undefined && props.wind_gust !== null ? props.wind_gust + ' km/h' : 'N/D'}<br>
-                        <strong>Pioggia (Rate):</strong> ${props.precip_rate !== undefined && props.precip_rate !== null ? props.precip_rate + ' mm/h' : 'N/D'}<br>
-                        <strong>Pioggia (Totale):</strong> ${props.precip_total !== undefined && props.precip_total !== null ? props.precip_total + ' mm' : 'N/D'}<br>
-                        <strong>Radiazione Solare:</strong> ${props.solar_radiation !== undefined && props.solar_radiation !== null ? props.solar_radiation + ' W/m²' : 'N/D'}<br>
-                        <strong>Indice UV:</strong> ${props.uv !== undefined && props.uv !== null ? props.uv : 'N/D'}
+                        <strong>Pioggia (Ultima):</strong> ${props.precip_final !== undefined ? props.precip_final : (props.precip_rate !== undefined ? props.precip_rate : 'N/D')} mm<br>
                     </div>
                 `);
             }
 
-            // Caricamento iniziale
             loadMeteoData('data/meteo_latest.json', false);
             loadRasterOverlays();
 
-            // Gestione calendario
             document.getElementById('archive-date').addEventListener('change', (e) => {
                 const selectedDate = e.target.value;
                 if (selectedDate) {
@@ -294,7 +305,6 @@
                 }
             });
 
-            // Aggiornamento periodico in tempo reale
             setInterval(() => {
                 const dateVal = document.getElementById('archive-date').value;
                 if (!dateVal) {
