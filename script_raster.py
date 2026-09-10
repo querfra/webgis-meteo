@@ -14,11 +14,12 @@ with open("data/meteo_latest.json", "r", encoding="utf-8") as f:
 
 lons, lats, vals = [], [], []
 for feature in data.get("features", []):
-    props = feature.properties
-    coords = feature.geometry.coordinates
+    props = feature.get("properties", {})
+    geometry = feature.get("geometry", {})
+    coords = geometry.get("coordinates", [])
     precip = props.get("precip_rate")
     
-    if precip is not None and coords:
+    if precip is not None and len(coords) >= 2:
         lons.append(coords[0])
         lats.append(coords[1])
         vals.append(float(precip))
@@ -44,7 +45,6 @@ os.makedirs("data/raster", exist_ok=True)
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
 
-# Mappa dei colori trasparente per la pioggia (da azzurro a blu intenso)
 im = ax.imshow(GRID_VALS, extent=[lons.min() - 0.05, lons.max() + 0.05, lats.min() - 0.05, lats.max() + 0.05],
                origin='lower', cmap='Blues', alpha=0.6, vmin=0, vmax=max(5, vals.max()))
 
