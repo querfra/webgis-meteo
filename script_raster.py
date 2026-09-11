@@ -1,9 +1,12 @@
 import os
 import json
 import numpy as np
+import geopandas as gpd
 from scipy.interpolate import griddata, Rbf
 import matplotlib.pyplot as plt
 from datetime import datetime
+from rasterio.features import geometry_mask
+from rasterio.transform import from_bounds
 
 # 1. Caricamento dati da meteo_latest.json
 if not os.path.exists("data/meteo_latest.json"):
@@ -51,8 +54,32 @@ common_extent = [data_lon_min, data_lon_max, data_lat_min, data_lat_max]
 
 os.makedirs("data/raster", exist_ok=True)
 
+# 2.1 Caricamento dello Shapefile e preparazione della maschera geometrica
+shp_path = "data/boundary/tuo_poligono.shp"  # Sostituisci con il nome reale del file .shp
+if os.path.exists(shp_path):
+    gdf = gpd.read_file(shp_path)
+    
+    # Se il CRS non è definito (es. file .prj mancante), lo impostiamo a 32632
+    if gdf.crs is None:
+        gdf.set_crs("EPSG:32632", inplace=True)
+        
+    # Riproiectiamo in WGS84 per allinearlo perfettamente alla griglia lat/lon
+    if gdf.crs != "EPSG:4326":
+        gdf = gdf.to_crs("EPSG:4326")
+        
+    geometries = [geom for geom in gdf.geometry]
+    
+    transform = from_bounds(data_lon_min, data_lat_min, data_lon_max, data_lat_max, GRID_LON.shape[1], GRID_LON.shape[0])
+    clip_mask = geometry_mask(geometries, transform=transform, out_shape=GRID_LON.shape, invert=True)
+else:
+    clip_mask = None
+    print("Attenzione: Shapefile non trovato. Verrà utilizzata l'estensione rettangolare standard.")
+
 # 3. Generazione Raster Precipitazioni (Metodo Lineare)
 GRID_PRECIP = griddata((lons, lats), precip_vals, (GRID_LON, GRID_LAT), method='linear', fill_value=0)
+if clip_mask is not None:
+    GRID_PRECIP = np.where(clip_mask, GRID_PRECIP, np.nan)
+
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
 ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.6, vmin=0, vmax=max(5, np.nanmax(precip_vals)))
@@ -70,6 +97,9 @@ if np.sum(valid_temp_mask) >= 3:
         smooth=0.0
     )
     GRID_TEMP = rbf(GRID_LON, GRID_LAT)
+    
+    if clip_mask is not None:
+        GRID_TEMP = np.where(clip_mask, GRID_TEMP, np.nan)
 
     fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
     ax.set_axis_off()
@@ -86,9 +116,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster allineati con RBF e scala termica fissa da -5 a 45."
+    "note": "Raster mascherati con Shapefile, allineati con RBF e scala termica fissa da -5 a 45."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Raster generati con successo (temperatura bloccata tra -5 e 45).")
+print("Raster generati e ritagliati con successo.")
