@@ -41,10 +41,10 @@ precip_vals = np.array(precip_vals)
 temp_vals = np.array(temp_vals)
 
 # 2. Calcolo UNICO di griglia ed extent per allineare perfettamente i layer
-data_lon_min = lons.min() - 0.05
-data_lon_max = lons.max() + 0.05
-data_lat_min = lats.min() - 0.05
-data_lat_max = lats.max() + 0.05
+data_lon_min = lons.min() - 0.01
+data_lon_max = lons.max() + 0.01
+data_lat_min = lats.min() - 0.01
+data_lat_max = lats.max() + 0.01
 
 grid_lon = np.linspace(data_lon_min, data_lon_max, 200)
 grid_lat = np.linspace(data_lat_min, data_lat_max, 200)
