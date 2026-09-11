@@ -2,8 +2,8 @@ name: Aggiornamento Meteo Completo
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Esegue l'intero processo ogni 10 minuti
-  workflow_dispatch: # Permette l'avvio manuale
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
 jobs:
   update-meteo-pipeline:
@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.10'
 
-     - name: Installa dipendenze
+      - name: Installa dipendenze
         run: pip install requests numpy scipy matplotlib geopandas rasterio
 
       - name: 1. Scarica dati meteo e genera summary
