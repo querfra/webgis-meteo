@@ -199,7 +199,7 @@
                             const windDir = (props.wind_dir !== null && props.wind_dir !== undefined) ? props.wind_dir : 0;
                             const humVal = (props.humidity !== null && props.humidity !== undefined) ? props.humidity + '%' : 'N/D';
                             
-                            const precipValRaw = isArchive ? (props.precip_final !== undefined ? props.precip_final : props.precip_rate) : props.precip_rate;
+                            const precipValRaw = isArchive ? (props.precip_final !== undefined ? props.precip_final : props.precip_total) : props.precip_total;
                             const precipValNum = (precipValRaw !== null && precipValRaw !== undefined) ? Number(precipValRaw) : 0;
                             const precipVal = precipValNum > 0 ? precipValNum.toFixed(1) + 'mm' : '0mm';
 
@@ -289,7 +289,7 @@
                         <hr style="margin: 5px 0; border: none; border-top: 1px solid #cbd5e1;">
                         ${tempInfo}
                         <strong>Umidità:</strong> ${props.humidity !== undefined && props.humidity !== null ? props.humidity + '%' : 'N/D'}<br>
-                        <strong>Pioggia (Ultima):</strong> ${props.precip_final !== undefined ? props.precip_final : (props.precip_rate !== undefined ? props.precip_rate : 'N/D')} mm<br>
+                        <strong>Pioggia (Ultima):</strong> ${props.precip_final !== undefined ? props.precip_final : (props.precip_total !== undefined ? props.precip_total : 'N/D')} mm<br>
                     </div>
                 `);
             }
