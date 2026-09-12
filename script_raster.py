@@ -75,16 +75,23 @@ else:
     clip_mask = None
     print("Attenzione: Shapefile non trovato. Verrà utilizzata l'estensione rettangolare standard.")
 
-# 3. Generazione Raster Precipitazioni (Metodo Lineare)
-GRID_PRECIP = griddata((lons, lats), precip_vals, (GRID_LON, GRID_LAT), method='linear', fill_value=0)
+# Generazione Raster Precipitazioni con RBF (es. multiquadric) per maggiore omogeneità
+valid_precip_mask = ~np.isnan(precip_vals)
+if np.sum(valid_precip_mask) >= 3:
+    rbf_precip = Rbf(
+        lons[valid_precip_mask], 
+        lats[valid_precip_mask], 
+        precip_vals[valid_precip_mask], 
+        function='multiquadric',  # Oppure 'inverse', 'gaussian'
+        smooth=0.1                # Un piccolo valore di smoothing aiuta a smorzare i picchi isolati
+    )
+    GRID_PRECIP = rbf_precip(GRID_LON, GRID_LAT)
+    GRID_PRECIP = np.clip(GRID_PRECIP, 0, None)  # Evita valori negativi fisicamente impossibili
+else:
+    GRID_PRECIP = np.zeros_like(GRID_LON)
+
 if clip_mask is not None:
     GRID_PRECIP = np.where(clip_mask, GRID_PRECIP, np.nan)
-
-fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
-ax.set_axis_off()
-ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.6, vmin=0, vmax=max(5, np.nanmax(precip_vals)))
-plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
-plt.close()
 
 # 4. Generazione Raster Temperatura (Metodo RBF con Thin Plate Spline e scala 'nipy_spectral')
 valid_temp_mask = ~np.isnan(temp_vals)
