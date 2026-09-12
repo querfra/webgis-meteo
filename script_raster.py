@@ -23,7 +23,7 @@ for feature in data.get("features", []):
     
     if len(coords) >= 2:
         lon, lat = coords[0], coords[1]
-        precip = props.get("precip_rate")
+        precip = props.get("precip_total")
         temp = props.get("temp")
         
         lons.append(lon)
