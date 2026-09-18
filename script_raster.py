@@ -97,7 +97,7 @@ if clip_mask is not None:
 # Salvataggio Raster Precipitazioni (Aggiunto per non perdere il file png)
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.6, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
