@@ -23,6 +23,7 @@ for feature in data.get("features", []):
     
     if len(coords) >= 2:
         lon, lat = coords[0], coords[1]
+        # Utilizzo corretto di precip_total per il cumulato giornaliero
         precip = props.get("precip_total")
         temp = props.get("temp")
         
@@ -75,23 +76,30 @@ else:
     clip_mask = None
     print("Attenzione: Shapefile non trovato. Verrà utilizzata l'estensione rettangolare standard.")
 
-# Generazione Raster Precipitazioni con RBF (es. multiquadric) per maggiore omogeneità
+# 3. Generazione Raster Precipitazioni con RBF (multiquadric) basato su precip_total
 valid_precip_mask = ~np.isnan(precip_vals)
 if np.sum(valid_precip_mask) >= 3:
     rbf_precip = Rbf(
         lons[valid_precip_mask], 
         lats[valid_precip_mask], 
         precip_vals[valid_precip_mask], 
-        function='multiquadric',  # Oppure 'inverse', 'gaussian'
-        smooth=0.1                # Un piccolo valore di smoothing aiuta a smorzare i picchi isolati
+        function='multiquadric', 
+        smooth=0.1
     )
     GRID_PRECIP = rbf_precip(GRID_LON, GRID_LAT)
-    GRID_PRECIP = np.clip(GRID_PRECIP, 0, None)  # Evita valori negativi fisicamente impossibili
+    GRID_PRECIP = np.clip(GRID_PRECIP, 0, None)  # Evita valori negativi
 else:
     GRID_PRECIP = np.zeros_like(GRID_LON)
 
 if clip_mask is not None:
     GRID_PRECIP = np.where(clip_mask, GRID_PRECIP, np.nan)
+
+# Salvataggio Raster Precipitazioni (Aggiunto per non perdere il file png)
+fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
+ax.set_axis_off()
+ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.6, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
+plt.close()
 
 # 4. Generazione Raster Temperatura (Metodo RBF con Thin Plate Spline e scala 'nipy_spectral')
 valid_temp_mask = ~np.isnan(temp_vals)
@@ -123,9 +131,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster mascherati con Shapefile, allineati con RBF e scala termica fissa da -5 a 45."
+    "note": "Raster precipitazioni (precip_total) e temperatura mascherati con Shapefile."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Raster generati e ritagliati con successo.")
+print("Raster generati, ritagliati e salvati con successo.")
