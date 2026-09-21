@@ -10,7 +10,7 @@ STATION_IDS = [
     "IBRIND47", "IBRIND55", "IBRIND32", "ISANPI44",
     "IPUGLIAL9", "ISANVI152", "ICAROV30", "IBRIND35",  "IPUGLIAB15", "ICAROV6", "IOSTUN15", "IOSTUN25", "IBRINDIS4",
     "ICAROV31", "ISANDO87", "IMESAG6", "ISANPA46", "ISANPA27", "IERCHI6", "IORIA40", "IFRANC85", "IFRANC108", "IFRANC86", "IFRANC38",
-    "IFRANC119", "IFRANC101", "IFRANC80", "ISQUIN4", "ITREPU3", "ISAVA9", "ICEGLI7"
+    "IFRANC119", "IFRANC101", "IFRANC80", "ISQUIN4", "ITREPU3", "ISAVA9", "ICEGLI7",
     #lecce
     "ILIZZA20", "IPGLECCE3", "ILECCE79", "ISURBO4", "ILECCE78", "ILECCE71"
 ]
@@ -128,9 +128,25 @@ if features:
             continue
             
         current_temp = props.get("temp")
-        current_precip = props.get("precip_total") if props.get("precip_total") is not None else props.get("precip_rate")
         
+        # Recupera i dati precedenti salvati nel summary di oggi per questa stazione
         prev_props = existing_stations.get(station_id, {})
+        
+        # --- GESTIONE ROBUSTA PRECIPITAZIONI (MAX GIORNALIERO) ---
+        # 1. Legge il valore attuale dall'API (dando priorità a precip_total, fallback su precip_rate)
+        api_precip = props.get("precip_total")
+        if api_precip is None:
+            api_precip = props.get("precip_rate", 0.0)
+        current_precip = float(api_precip) if api_precip is not None else 0.0
+        
+        # 2. Legge il cumulato precedente salvato nel summary del giorno
+        prev_precip = float(prev_props.get("precip_final", 0.0))
+        
+        # 3. Prende il massimo tra il valore precedente e quello attuale
+        # Essendo precip_total un progressivo giornaliero, il max preserva il cumulato 
+        # ed evita che eventuali reset o zeri dell'API azzerino la pioggia accumulata finora.
+        last_precip = max(prev_precip, current_precip)
+        # --------------------------------------------------------
         
         # Calcolo Temperatura Max accumulata
         t_max = prev_props.get("temp_max")
@@ -144,9 +160,6 @@ if features:
             if t_min is None or float(current_temp) < float(t_min):
                 t_min = float(current_temp)
                 
-        # Ultimo dato utile di pioggia
-        last_precip = current_precip if current_precip is not None else prev_props.get("precip_final", 0.0)
-        
         summary_feature = {
             "type": "Feature",
             "geometry": feature.get("geometry"),
