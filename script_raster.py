@@ -101,7 +101,7 @@ salva_geotiff_temporaneo(temp_temp_path, GRID_TEMP, common_extent)
 # =====================================================================
 # 5. RITAGLIO SEQUENZIALE CON LO SHAPEFILE
 # =====================================================================
-shp_path = "data/boundary/data/boundary/prov_BR.shp"  # Sostituisci con il percorso reale
+shp_path = "data/boundary/prov_BR.shp"  # Sostituisci con il percorso reale
 
 if os.path.exists(shp_path):
     print("Applicazione ritaglio geometrico con Shapefile...")
