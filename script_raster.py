@@ -56,7 +56,7 @@ common_extent = [data_lon_min, data_lon_max, data_lat_min, data_lat_max]
 os.makedirs("data/raster", exist_ok=True)
 
 # 2.1 Caricamento dello Shapefile e preparazione della maschera geometrica
-shp_path = "data/boundary/tuo_poligono.shp"  # Sostituisci con il nome reale del file .shp
+shp_path = "data/boundary/prov_BR.shp"  # Sostituisci con il nome reale del file .shp
 if os.path.exists(shp_path):
     gdf = gpd.read_file(shp_path)
     
