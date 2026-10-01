@@ -18,7 +18,7 @@
         "temp_min": 18.0,
         "humidity": 49.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -37,7 +37,7 @@
         "temp_min": 18.4,
         "humidity": 60.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -54,9 +54,9 @@
         "neighborhood": "Betlemme",
         "temp_max": 23.7,
         "temp_min": 21.3,
-        "humidity": 54.0,
+        "humidity": 55.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -73,9 +73,9 @@
         "neighborhood": "Materdomini",
         "temp_max": 26.1,
         "temp_min": 21.7,
-        "humidity": 47.0,
+        "humidity": 48.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -94,7 +94,7 @@
         "temp_min": 18.8,
         "humidity": 53.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -111,9 +111,9 @@
         "neighborhood": "Brindisi",
         "temp_max": 23.9,
         "temp_min": 18.2,
-        "humidity": 56.0,
+        "humidity": 50.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -130,9 +130,9 @@
         "neighborhood": "Brindisi",
         "temp_max": 25.3,
         "temp_min": 17.8,
-        "humidity": 50.0,
+        "humidity": 47.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -149,9 +149,9 @@
         "neighborhood": "San Pietro Vernotico",
         "temp_max": 24.3,
         "temp_min": 16.6,
-        "humidity": 47.0,
+        "humidity": 43.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -166,11 +166,11 @@
       "properties": {
         "station_id": "IPUGLIAL9",
         "neighborhood": "LATIANO",
-        "temp_max": 23.8,
+        "temp_max": 23.9,
         "temp_min": 17.2,
-        "humidity": 55.0,
+        "humidity": 52.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -187,9 +187,9 @@
         "neighborhood": "San Vito dei Normanni",
         "temp_max": 25.0,
         "temp_min": 16.5,
-        "humidity": 47.0,
+        "humidity": 49.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -206,9 +206,9 @@
         "neighborhood": "Carovigno",
         "temp_max": 23.6,
         "temp_min": 17.5,
-        "humidity": 46.0,
+        "humidity": 51.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -225,9 +225,9 @@
         "neighborhood": "Brindisi",
         "temp_max": 24.8,
         "temp_min": 18.8,
-        "humidity": 50.0,
+        "humidity": 51.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -244,9 +244,9 @@
         "neighborhood": "Brindisi Sant'Elia",
         "temp_max": 23.9,
         "temp_min": 17.5,
-        "humidity": 51.0,
+        "humidity": 48.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -265,7 +265,7 @@
         "temp_min": 18.8,
         "humidity": null,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -284,7 +284,7 @@
         "temp_min": 17.5,
         "humidity": 46.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -301,9 +301,9 @@
         "neighborhood": "Costa Merlata",
         "temp_max": 24.0,
         "temp_min": 18.2,
-        "humidity": 49.0,
+        "humidity": 53.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -320,9 +320,9 @@
         "neighborhood": "Carovigno, Via Belvedere",
         "temp_max": 24.3,
         "temp_min": 17.4,
-        "humidity": 45.0,
+        "humidity": 46.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -341,7 +341,7 @@
         "temp_min": 18.3,
         "humidity": 49.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -360,7 +360,7 @@
         "temp_min": 17.2,
         "humidity": 38.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -379,7 +379,7 @@
         "temp_min": null,
         "humidity": null,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -396,9 +396,9 @@
         "neighborhood": "San Pancrazio Salentino",
         "temp_max": 27.2,
         "temp_min": 17.1,
-        "humidity": 37.0,
+        "humidity": 39.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -417,7 +417,7 @@
         "temp_min": null,
         "humidity": null,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -434,9 +434,9 @@
         "neighborhood": "Erchie",
         "temp_max": 26.0,
         "temp_min": 16.6,
-        "humidity": 35.0,
+        "humidity": 36.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -453,9 +453,9 @@
         "neighborhood": "Oria",
         "temp_max": 24.3,
         "temp_min": 17.0,
-        "humidity": 38.0,
+        "humidity": 41.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -472,9 +472,9 @@
         "neighborhood": "Francavilla Fontana",
         "temp_max": 25.4,
         "temp_min": 17.4,
-        "humidity": 41.0,
+        "humidity": 38.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -491,9 +491,9 @@
         "neighborhood": "Francavilla Fontana",
         "temp_max": 24.7,
         "temp_min": 18.1,
-        "humidity": 46.0,
+        "humidity": 45.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -508,11 +508,11 @@
       "properties": {
         "station_id": "IFRANC86",
         "neighborhood": "Francavilla Fontana",
-        "temp_max": 24.3,
+        "temp_max": 24.4,
         "temp_min": 17.7,
-        "humidity": 43.0,
+        "humidity": 40.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -527,11 +527,11 @@
       "properties": {
         "station_id": "IFRANC38",
         "neighborhood": "Francavilla Fontana",
-        "temp_max": 24.5,
+        "temp_max": 24.7,
         "temp_min": 17.9,
-        "humidity": 46.0,
+        "humidity": 43.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -546,11 +546,11 @@
       "properties": {
         "station_id": "IFRANC119",
         "neighborhood": "Francavilla Fontana",
-        "temp_max": 24.2,
+        "temp_max": 24.4,
         "temp_min": 17.9,
-        "humidity": 40.0,
+        "humidity": 38.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -565,11 +565,11 @@
       "properties": {
         "station_id": "IFRANC101",
         "neighborhood": "Francavilla Fontana",
-        "temp_max": 25.3,
+        "temp_max": 25.4,
         "temp_min": 16.1,
         "humidity": 41.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -584,11 +584,11 @@
       "properties": {
         "station_id": "IFRANC80",
         "neighborhood": "Francavilla Fontana",
-        "temp_max": 25.1,
+        "temp_max": 25.3,
         "temp_min": 17.3,
-        "humidity": 40.0,
+        "humidity": 41.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -603,11 +603,11 @@
       "properties": {
         "station_id": "ISQUIN4",
         "neighborhood": "Squinzano",
-        "temp_max": 24.0,
+        "temp_max": 24.3,
         "temp_min": 17.7,
-        "humidity": 39.0,
+        "humidity": 37.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -626,7 +626,7 @@
         "temp_min": 17.3,
         "humidity": 33.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -645,7 +645,7 @@
         "temp_min": 16.8,
         "humidity": 40.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -660,11 +660,11 @@
       "properties": {
         "station_id": "ICEGLI7",
         "neighborhood": "Ceglie Messapica",
-        "temp_max": 23.4,
+        "temp_max": 23.5,
         "temp_min": 15.7,
-        "humidity": 47.0,
+        "humidity": 49.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -681,9 +681,9 @@
         "neighborhood": "Merine",
         "temp_max": 25.6,
         "temp_min": 15.6,
-        "humidity": 40.0,
+        "humidity": 37.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -698,11 +698,11 @@
       "properties": {
         "station_id": "IPGLECCE3",
         "neighborhood": "iw7dks",
-        "temp_max": 24.8,
+        "temp_max": 25.0,
         "temp_min": 17.6,
-        "humidity": 35.0,
+        "humidity": 37.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -721,7 +721,7 @@
         "temp_min": 17.7,
         "humidity": 33.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -738,9 +738,9 @@
         "neighborhood": "Giorgilorio",
         "temp_max": 25.5,
         "temp_min": 16.9,
-        "humidity": 40.0,
+        "humidity": 39.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -759,7 +759,7 @@
         "temp_min": 17.3,
         "humidity": 35.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     },
     {
@@ -774,11 +774,11 @@
       "properties": {
         "station_id": "ILECCE71",
         "neighborhood": "Torre Rinalda",
-        "temp_max": 23.1,
+        "temp_max": 23.2,
         "temp_min": 17.4,
-        "humidity": 55.0,
+        "humidity": 58.0,
         "precip_final": 0.0,
-        "archived_at": "2026-10-01 11:26:53"
+        "archived_at": "2026-10-01 11:47:22"
       }
     }
   ]
