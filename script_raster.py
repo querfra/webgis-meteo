@@ -141,4 +141,48 @@ if os.path.exists(shp_path):
         })
         
         clipped_temp_tif = "data/raster/temp_raster.tif"
-        with rasterio.open(clipped_temp_
+        with rasterio.open(clipped_temp_tif, "w", **out_meta) as dest:
+            dest.write(out_image)
+        GRID_TEMP_CLIPPED = out_image[0]
+        
+    # Pulizia file temporanei intermedi
+    for p in [temp_precip_path, temp_temp_path]:
+        if os.path.exists(p):
+            os.remove(p)
+            
+    print("Ritaglio GeoTIFF completato con successo.")
+else:
+    print("Attenzione: Shapefile non trovato. Vengono mantenuti i raster interi.")
+    os.rename(temp_precip_path, "data/raster/precip_raster.tif")
+    os.rename(temp_temp_path, "data/raster/temp_raster.tif")
+    GRID_PRECIP_CLIPPED = GRID_PRECIP
+    GRID_TEMP_CLIPPED = GRID_TEMP
+
+# 6. Esportazione delle immagini PNG finali per la visualizzazione Web
+# PNG Precipitazioni
+fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
+ax.set_axis_off()
+ax.imshow(GRID_PRECIP_CLIPPED, cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
+plt.close()
+
+# PNG Temperatura
+fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
+ax.set_axis_off()
+ax.imshow(GRID_TEMP_CLIPPED, cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
+plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
+plt.close()
+
+# 7. Salvataggio metadati JSON dei confini
+bounds = {
+    "bounds": [
+        [data_lat_min, data_lon_min],
+        [data_lat_max, data_lon_max]
+    ],
+    "generated_at": datetime.now().isoformat(),
+    "note": "Raster GeoTIFF e PNG generati e ritagliati correttamente con Shapefile."
+}
+with open("data/raster/raster_bounds.json", "w") as f:
+    json.dump(bounds, f)
+
+print("Elaborazione completata: raster generati, ritagliati in GeoTIFF e convertiti in PNG.")
