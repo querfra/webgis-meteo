@@ -103,7 +103,6 @@ salva_geotiff_temporaneo(temp_temp_path, GRID_TEMP, common_extent)
 # =====================================================================
 shp_path = "data/boundary/prov_BR.shp"
 
-# Variabili di transform e dimensioni per il corretto extent georeferenziato
 out_transform_precip = None
 out_transform_temp = None
 
@@ -130,4 +129,64 @@ if os.path.exists(shp_path):
         })
         
         clipped_precip_tif = "data/raster/precip_raster.tif"
-        with rasterio.open(clipped_precip_tif, "w", **
+        with rasterio.open(clipped_precip_tif, "w", **out_meta) as dest:
+            dest.write(out_image)
+        GRID_PRECIP_CLIPPED = out_image[0]
+
+    # --- Ritaglio Temperatura ---
+    with rasterio.open(temp_temp_path) as src:
+        out_image, out_transform_temp = rasterio.mask.mask(src, shapes, crop=True, all_touched=True, nodata=np.nan)
+        out_meta = src.meta.copy()
+        out_meta.update({
+            "height": out_image.shape[1], 
+            "width": out_image.shape[2], 
+            "transform": out_transform_temp
+        })
+        
+        clipped_temp_tif = "data/raster/temp_raster.tif"
+        with rasterio.open(clipped_temp_tif, "w", **out_meta) as dest:
+            dest.write(out_image)
+        GRID_TEMP_CLIPPED = out_image[0]
+        
+    # Pulizia file temporanei intermedi
+    for p in [temp_precip_path, temp_temp_path]:
+        if os.path.exists(p):
+            os.remove(p)
+            
+    print("Ritaglio GeoTIFF completato con successo.")
+else:
+    print("Attenzione: Shapefile non trovato. Vengono mantenuti i raster interi.")
+    os.rename(temp_precip_path, "data/raster/precip_raster.tif")
+    os.rename(temp_temp_path, "data/raster/temp_raster.tif")
+    GRID_PRECIP_CLIPPED = GRID_PRECIP
+    GRID_TEMP_CLIPPED = GRID_TEMP
+    out_transform_precip = rasterio.transform.from_bounds(common_extent[0], common_extent[2], common_extent[1], common_extent[3], GRID_PRECIP.shape[1], GRID_PRECIP.shape[0])
+    out_transform_temp = out_transform_precip
+
+# 6. Esportazione delle immagini PNG finali con corretto extent geografico
+h_p, w_p = GRID_PRECIP_CLIPPED.shape
+extent_precip = [
+    out_transform_precip[2], 
+    out_transform_precip[2] + w_p * out_transform_precip[0], 
+    out_transform_precip[5] + h_p * out_transform_precip[4], 
+    out_transform_precip[5]
+]
+
+h_t, w_t = GRID_TEMP_CLIPPED.shape
+extent_temp = [
+    out_transform_temp[2], 
+    out_transform_temp[2] + w_t * out_transform_temp[0], 
+    out_transform_temp[5] + h_t * out_transform_temp[4], 
+    out_transform_temp[5]
+]
+
+# PNG Precipitazioni
+fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
+ax.set_axis_off()
+ax.imshow(GRID_PRECIP_CLIPPED, extent=extent_precip, origin='upper', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
+plt.close()
+
+# PNG Temperatura
+fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
+ax.set_axis_off()
