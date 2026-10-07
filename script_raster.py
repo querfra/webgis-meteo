@@ -1,14 +1,11 @@
 import os
 import json
 import numpy as np
-import geopandas as gpd
 from scipy.interpolate import Rbf
 import matplotlib.pyplot as plt
 from datetime import datetime
 import rasterio
-import rasterio.mask
 from rasterio.transform import from_bounds
-import fiona
 
 # 1. Caricamento dati da meteo_latest.json
 if not os.path.exists("data/meteo_latest.json"):
@@ -55,8 +52,8 @@ common_extent = [data_lon_min, data_lon_max, data_lat_min, data_lat_max]
 
 os.makedirs("data/raster", exist_ok=True)
 
-# Funzione di supporto per salvare un array numpy in GeoTIFF temporaneo
-def salva_geotiff_temporaneo(filepath, array, extent):
+# Funzione di supporto per salvare un array numpy in GeoTIFF
+def salva_geotiff(filepath, array, extent):
     height, width = array.shape
     xmin, xmax, ymin, ymax = extent
     transform = from_bounds(xmin, ymin, xmax, ymax, width, height)
@@ -84,8 +81,8 @@ if np.sum(valid_precip_mask) >= 3:
 else:
     GRID_PRECIP = np.zeros_like(GRID_LON)
 
-temp_precip_path = "data/raster/precip_temp_full.tif"
-salva_geotiff_temporaneo(temp_precip_path, GRID_PRECIP, common_extent)
+precip_tif_path = "data/raster/precip_raster.tif"
+salva_geotiff(precip_tif_path, GRID_PRECIP, common_extent)
 
 # 4. Generazione Raster Temperatura (RBF)
 valid_temp_mask = ~np.isnan(temp_vals)
@@ -95,105 +92,34 @@ if np.sum(valid_temp_mask) >= 3:
 else:
     GRID_TEMP = np.full_like(GRID_LON, np.nan)
 
-temp_temp_path = "data/raster/temp_temp_full.tif"
-salva_geotiff_temporaneo(temp_temp_path, GRID_TEMP, common_extent)
+temp_tif_path = "data/raster/temp_raster.tif"
+salva_geotiff(temp_tif_path, GRID_TEMP, common_extent)
 
-# =====================================================================
-# 5. RITAGLIO SEQUENZIALE CORRETTO CON LO SHAPEFILE
-# =====================================================================
-shp_path = "data/boundary/prov_BR.shp"
-
-extent_precip = common_extent
-extent_temp = common_extent
-
-if os.path.exists(shp_path):
-    print("Applicazione ritaglio geometrico con Shapefile...")
-    
-    gdf = gpd.read_file(shp_path)
-    if gdf.crs is None:
-        gdf.set_crs("EPSG:32632", inplace=True)
-    
-    if gdf.crs != "EPSG:4326":
-        gdf = gdf.to_crs("EPSG:4326")
-        
-    shapes = [geom for geom in gdf.geometry]
-    
-    # --- Ritaglio Precipitazioni ---
-    with rasterio.open(temp_precip_path) as src:
-        out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True, all_touched=True, nodata=np.nan)
-        out_meta = src.meta.copy()
-        out_meta.update({
-            "height": out_image.shape[1], 
-            "width": out_image.shape[2], 
-            "transform": out_transform
-        })
-        
-        clipped_precip_tif = "data/raster/precip_raster.tif"
-        with rasterio.open(clipped_precip_tif, "w", **out_meta) as dest:
-            dest.write(out_image)
-        GRID_PRECIP_CLIPPED = out_image[0]
-        
-        # array_bounds restituisce (west, south, east, north)
-        b = rasterio.transform.array_bounds(out_meta['height'], out_meta['width'], out_transform)
-        # L'extent per matplotlib deve essere [xmin, xmax, ymin, ymax] -> [west, east, south, north]
-        extent_precip = [b[0], b[2], b[1], b[3]]
-
-    # --- Ritaglio Temperatura ---
-    with rasterio.open(temp_temp_path) as src:
-        out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True, all_touched=True, nodata=np.nan)
-        out_meta = src.meta.copy()
-        out_meta.update({
-            "height": out_image.shape[1], 
-            "width": out_image.shape[2], 
-            "transform": out_transform
-        })
-        
-        clipped_temp_tif = "data/raster/temp_raster.tif"
-        with rasterio.open(clipped_temp_tif, "w", **out_meta) as dest:
-            dest.write(out_image)
-        GRID_TEMP_CLIPPED = out_image[0]
-        
-        b = rasterio.transform.array_bounds(out_meta['height'], out_meta['width'], out_transform)
-        extent_temp = [b[0], b[2], b[1], b[3]]
-        
-    # Pulizia file temporanei intermedi
-    for p in [temp_precip_path, temp_temp_path]:
-        if os.path.exists(p):
-            os.remove(p)
-            
-    print("Ritaglio GeoTIFF completato con successo.")
-else:
-    print("Attenzione: Shapefile non trovato. Vengono mantenuti i raster interi.")
-    os.rename(temp_precip_path, "data/raster/precip_raster.tif")
-    os.rename(temp_temp_path, "data/raster/temp_raster.tif")
-    GRID_PRECIP_CLIPPED = GRID_PRECIP
-    GRID_TEMP_CLIPPED = GRID_TEMP
-
-# 6. Esportazione delle immagini PNG finali con corretto extent e origin='upper'
+# 5. Esportazione delle immagini PNG finali con corretto extent [xmin, xmax, ymin, ymax]
 # PNG Precipitazioni
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_PRECIP_CLIPPED, extent=extent_precip, origin='upper', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
 # PNG Temperatura
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_TEMP_CLIPPED, extent=extent_temp, origin='upper', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
+ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
 plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# 7. Salvataggio metadati JSON dei confini
+# 6. Salvataggio metadati JSON dei confini
 bounds = {
     "bounds": [
         [data_lat_min, data_lon_min],
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster GeoTIFF e PNG generati e ritagliati correttamente con Shapefile."
+    "note": "Raster GeoTIFF e PNG generati correttamente senza ritaglio geometrico."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Elaborazione completata: raster generati, ritagliati in GeoTIFF e convertiti in PNG.")
+print("Elaborazione completata senza ritaglio: raster GeoTIFF e PNG generati con successo.")
