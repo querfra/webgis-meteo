@@ -133,9 +133,9 @@ if os.path.exists(shp_path):
             dest.write(out_image)
         GRID_PRECIP_CLIPPED = out_image[0]
         
-        # Calcolo extent geometrico esatto dai bounds del rasterio risultante
+        # array_bounds restituisce (west, south, east, north)
         b = rasterio.transform.array_bounds(out_meta['height'], out_meta['width'], out_transform)
-        # array_bounds restituisce (west, south, east, north) -> [xmin, ymin, xmax, ymax]
+        # L'extent per matplotlib deve essere [xmin, xmax, ymin, ymax] -> [west, east, south, north]
         extent_precip = [b[0], b[2], b[1], b[3]]
 
     # --- Ritaglio Temperatura ---
@@ -169,18 +169,18 @@ else:
     GRID_PRECIP_CLIPPED = GRID_PRECIP
     GRID_TEMP_CLIPPED = GRID_TEMP
 
-# 6. Esportazione delle immagini PNG finali con corretto extent geografico e origin='lower' per matchare Leaflet/WebGIS
+# 6. Esportazione delle immagini PNG finali con corretto extent e origin='upper'
 # PNG Precipitazioni
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_PRECIP_CLIPPED, extent=extent_precip, origin='lower', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+ax.imshow(GRID_PRECIP_CLIPPED, extent=extent_precip, origin='upper', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
 # PNG Temperatura
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_TEMP_CLIPPED, extent=extent_temp, origin='lower', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
+ax.imshow(GRID_TEMP_CLIPPED, extent=extent_temp, origin='upper', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
 plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
