@@ -15,7 +15,9 @@ STATION_IDS = [
     "ILIZZA20", "IPGLECCE3", "ILECCE79", "ISURBO4", "ILECCE78", "ILECCE71", "IOSTUN23",
     "ICOPER2", "INARD15", "IGALAT16", "IPORTO179", "IPUGLIAT20", "IOTRAN11",
     "ICASTR210", "ICOLLE90", "IMUROL6", "IRACAL3", "ITAVIA1", "ICASTRIG2",
-    "IOTRAN18"
+    "IOTRAN18",
+    #bari
+    "ICORAT9", "ICORAT5", "IBARITER1", "IBARI61", "IPUTIG1", "IMONOP19"
 ]
 # --- scartata la stazione IBRIN37 perchè sovrastima ---
 # --- scartata la stazione "IBRIND72" per errore temperatura
