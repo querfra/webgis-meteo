@@ -96,16 +96,26 @@ else:
 temp_tif_path = "data/raster/temp_raster.tif"
 salva_geotiff(temp_tif_path, GRID_TEMP, common_extent)
 
-# 5. Configurazione Colormap personalizzata per le precipitazioni (stile standard meteo)
+# 5. Configurazione Colormap personalizzate
+# Precipitazioni (stile meteo standard)
 precip_colors = [
-    "#e6f0ff", "#cce0ff", "#99c2ff", "#66a3ff", "#3385ff", # 0 - 10 mm (azzurri)
-    "#0066cc", "#004d99",                                 # 10 - 20 mm (blu scuri)
-    "#00cc66", "#00994d", "#006633",                      # 20 - 40 mm (verdi)
-    "#66ff33", "#b3ff66", "#ffff66",                      # 40 - 80 mm (gialli/verdi chiari)
-    "#ffcc00", "#ff9900", "#ff6600",                      # 80 - 150 mm (arancioni)
-    "#ff3300", "#cc0000", "#800000"                       # 150 - 250+ mm (rossi e marroni)
+    "#e6f0ff", "#cce0ff", "#99c2ff", "#66a3ff", "#3385ff", # 0 - 10 mm
+    "#0066cc", "#004d99",                                 # 10 - 20 mm
+    "#00cc66", "#00994d", "#006633",                      # 20 - 40 mm
+    "#66ff33", "#b3ff66", "#ffff66",                      # 40 - 80 mm
+    "#ffcc00", "#ff9900", "#ff6600",                      # 80 - 150 mm
+    "#ff3300", "#cc0000", "#800000"                       # 150 - 250+ mm
 ]
 precip_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_precip", precip_colors)
+
+# Temperatura (da -25°C a +45°C basata sulla palette termica fornita)
+temp_colors = [
+    "#1a0033", "#330066", "#4b0082", "#6600cc", "#0033ff", "#0099ff", 
+    "#00cccc", "#00ffcc", "#00ff66", "#66ff00", "#ccff00", "#ffff00", 
+    "#ffcc00", "#ff9900", "#ff6600", "#ff3300", "#ff0000", "#cc0033", 
+    "#990066", "#660066"
+]
+temp_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_temp", temp_colors)
 
 # PNG Precipitazioni
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
@@ -122,16 +132,16 @@ ax.imshow(
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# PNG Temperatura
+# PNG Temperatura (con scala termica aggiornata da -25 a 45)
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
 ax.imshow(
     GRID_TEMP, 
     extent=common_extent, 
     origin='lower', 
-    cmap='nipy_spectral', 
+    cmap=temp_cmap, 
     alpha=0.6, 
-    vmin=-5, 
+    vmin=-25, 
     vmax=45
 )
 plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
@@ -144,9 +154,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster GeoTIFF e PNG generati con scala di precipitazione standard."
+    "note": "Raster GeoTIFF e PNG generati con scale cromatiche personalizzate per pioggia e temperatura."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Elaborazione completata: mappa di pioggia aggiornata con la nuova palette cromatica.")
+print("Elaborazione completata: mappe di pioggia e temperatura aggiornate con le nuove palette.")
