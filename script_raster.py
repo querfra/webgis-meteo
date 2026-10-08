@@ -96,19 +96,18 @@ else:
 temp_tif_path = "data/raster/temp_raster.tif"
 salva_geotiff(temp_tif_path, GRID_TEMP, common_extent)
 
-# 5. Configurazione Colormap personalizzate
-# Precipitazioni (stile meteo standard)
+# 5. Configurazione Colormap e Norme per Precipitazioni (Soglie esatte a barre)
+precip_bounds = [0.0, 0.5, 1, 2, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250]
 precip_colors = [
-    "#e6f0ff", "#cce0ff", "#99c2ff", "#66a3ff", "#3385ff", # 0 - 10 mm
-    "#0066cc", "#004d99",                                 # 10 - 20 mm
-    "#00cc66", "#00994d", "#006633",                      # 20 - 40 mm
-    "#66ff33", "#b3ff66", "#ffff66",                      # 40 - 80 mm
-    "#ffcc00", "#ff9900", "#ff6600",                      # 80 - 150 mm
-    "#ff3300", "#cc0000", "#800000"                       # 150 - 250+ mm
+    "#e6f0ff", "#cce0ff", "#99c2ff", "#66a3ff", "#3385ff", 
+    "#0066cc", "#004d99", "#00cc66", "#00994d", "#006633", 
+    "#66ff33", "#b3ff66", "#ffff66", "#ffcc00", "#ff9900", 
+    "#ff6600", "#ff3300", "#cc0000", "#800000"
 ]
-precip_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_precip", precip_colors)
+precip_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_precip", precip_colors, N=len(precip_bounds))
+precip_norm = mcolors.BoundaryNorm(precip_bounds, precip_cmap.N, clip=True)
 
-# Temperatura (da -25°C a +45°C basata sulla palette termica fornita)
+# Temperatura (da -25°C a +45°C)
 temp_colors = [
     "#1a0033", "#330066", "#4b0082", "#6600cc", "#0033ff", "#0099ff", 
     "#00cccc", "#00ffcc", "#00ff66", "#66ff00", "#ccff00", "#ffff00", 
@@ -117,7 +116,7 @@ temp_colors = [
 ]
 temp_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_temp", temp_colors)
 
-# PNG Precipitazioni
+# PNG Precipitazioni con BoundaryNorm applicata
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
 ax.imshow(
@@ -125,14 +124,13 @@ ax.imshow(
     extent=common_extent, 
     origin='lower', 
     cmap=precip_cmap, 
-    alpha=0.85, 
-    vmin=0, 
-    vmax=250
+    norm=precip_norm,
+    alpha=0.85
 )
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
-# PNG Temperatura (con scala termica aggiornata da -25 a 45)
+# PNG Temperatura
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
 ax.imshow(
@@ -154,9 +152,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster GeoTIFF e PNG generati con scale cromatiche personalizzate per pioggia e temperatura."
+    "note": "Raster GeoTIFF e PNG generati con scala di precipitazione a soglie discrete."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Elaborazione completata: mappe di pioggia e temperatura aggiornate con le nuove palette.")
+print("Elaborazione completata: mappa di pioggia allineata alle soglie standard.")
