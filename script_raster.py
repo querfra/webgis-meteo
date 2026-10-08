@@ -3,6 +3,7 @@ import json
 import numpy as np
 from scipy.interpolate import Rbf
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from datetime import datetime
 import rasterio
 from rasterio.transform import from_bounds
@@ -95,18 +96,44 @@ else:
 temp_tif_path = "data/raster/temp_raster.tif"
 salva_geotiff(temp_tif_path, GRID_TEMP, common_extent)
 
-# 5. Esportazione delle immagini PNG finali con corretto extent [xmin, xmax, ymin, ymax]
+# 5. Configurazione Colormap personalizzata per le precipitazioni (stile standard meteo)
+precip_colors = [
+    "#e6f0ff", "#cce0ff", "#99c2ff", "#66a3ff", "#3385ff", # 0 - 10 mm (azzurri)
+    "#0066cc", "#004d99",                                 # 10 - 20 mm (blu scuri)
+    "#00cc66", "#00994d", "#006633",                      # 20 - 40 mm (verdi)
+    "#66ff33", "#b3ff66", "#ffff66",                      # 40 - 80 mm (gialli/verdi chiari)
+    "#ffcc00", "#ff9900", "#ff6600",                      # 80 - 150 mm (arancioni)
+    "#ff3300", "#cc0000", "#800000"                       # 150 - 250+ mm (rossi e marroni)
+]
+precip_cmap = mcolors.LinearSegmentedColormap.from_list("meteo_precip", precip_colors)
+
 # PNG Precipitazioni
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_PRECIP, extent=common_extent, origin='lower', cmap='Blues', alpha=0.8, vmin=0, vmax=max(5, np.nanmax(precip_vals) if len(precip_vals) > 0 else 5))
+ax.imshow(
+    GRID_PRECIP, 
+    extent=common_extent, 
+    origin='lower', 
+    cmap=precip_cmap, 
+    alpha=0.85, 
+    vmin=0, 
+    vmax=250
+)
 plt.savefig("data/raster/precip_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
 # PNG Temperatura
 fig, ax = plt.subplots(figsize=(6, 6), frameon=False)
 ax.set_axis_off()
-ax.imshow(GRID_TEMP, extent=common_extent, origin='lower', cmap='nipy_spectral', alpha=0.6, vmin=-5, vmax=45)
+ax.imshow(
+    GRID_TEMP, 
+    extent=common_extent, 
+    origin='lower', 
+    cmap='nipy_spectral', 
+    alpha=0.6, 
+    vmin=-5, 
+    vmax=45
+)
 plt.savefig("data/raster/temp_raster.png", bbox_inches='tight', pad_inches=0, transparent=True)
 plt.close()
 
@@ -117,9 +144,9 @@ bounds = {
         [data_lat_max, data_lon_max]
     ],
     "generated_at": datetime.now().isoformat(),
-    "note": "Raster GeoTIFF e PNG generati correttamente senza ritaglio geometrico."
+    "note": "Raster GeoTIFF e PNG generati con scala di precipitazione standard."
 }
 with open("data/raster/raster_bounds.json", "w") as f:
     json.dump(bounds, f)
 
-print("Elaborazione completata senza ritaglio: raster GeoTIFF e PNG generati con successo.")
+print("Elaborazione completata: mappa di pioggia aggiornata con la nuova palette cromatica.")
